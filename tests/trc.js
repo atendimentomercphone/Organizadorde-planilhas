@@ -1,0 +1,19 @@
+const {chromium}=require('playwright');const fs=require('fs');
+(async()=>{const b=await chromium.launch();const ctx=await b.newContext({viewport:{width:1280,height:1000},acceptDownloads:true});const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
+const now=Date.now();const D=86400000;const mk=(d,e,t,imp,id)=>({ts:new Date(now-d*D).toISOString(),empresa:e,tipo:t,tipoNome:t,arquivo:t+'.xlsx',registros:50,ok:50,ajustados:0,atencao:0,valor:1000,ownerId:'u1',...(imp?{importado:{em:new Date(now-d*D).toISOString()}}:{})});
+const seed={};[mk(3,'Loja Teste','Clientes',true),mk(2,'loja teste ','Produtos',false),mk(1,'LOJA TESTE','Vendas',false),mk(1,'Teste Celulares Ltda','Vendas',true),mk(1,'Outra','Vendas',true)].forEach((r,i)=>{seed['importacoes/u1/itens/r'+i]=r});seed['importacoes/u1']={idx:true,name:'Ian'};
+await p.addInitScript(({seed})=>{const store=new Map(Object.entries(seed));const subs=[];const lsn=(prefix,fn)=>{const f=()=>{const docs=[...store.entries()].filter(([k])=>k.startsWith(prefix)&&!k.slice(prefix.length).includes('/')).map(([k,v])=>({id:k.slice(prefix.length),data:()=>v}));fn({docs,forEach:c=>docs.forEach(c)})};subs.push(f);f();return()=>{}};
+const col=path=>({onSnapshot:(fn)=>lsn(path+'/',fn),get:async()=>({docs:[...store.entries()].filter(([k])=>k.startsWith(path+'/')&&!k.slice(path.length+1).includes('/')).map(([k,v])=>({id:k.slice(path.length+1),data:()=>v}))}),where(){return col(path)},orderBy(){return col(path)},limit(){return col(path)},doc:id=>db.doc(path+'/'+id)});
+const db={doc:path=>({set:async d=>{store.set(path,d)},get:async()=>({exists:store.has(path),data:()=>store.get(path)}),delete:async()=>{store.delete(path)}}),collection:col};
+const user={id:async()=>'u1',profiles:async ids=>Object.fromEntries(ids.map(i=>[i,{name:'Ian'}])),search:async()=>[],canEdit:()=>true,isOwner:()=>true};
+window.__saved=null;const dl={save:async r=>{window.__saved=r.filename}};window.claude={use:async k=>({db,user,mcp:null,downloads:dl}[k]||null)}},{seed});
+const lib=fs.readFileSync('node_modules/pptxgenjs/dist/pptxgen.bundle.js');
+await p.route('**/*',r=>{const u=r.request().url();const m={'xlsx.full.min.js':'node_modules/xlsx/dist/xlsx.full.min.js','jspdf.umd.min.js':'node_modules/jspdf/dist/jspdf.umd.min.js','jspdf.plugin.aut':'node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.min.js','jszip.min.js':'node_modules/jszip/dist/jszip.min.js'};const k=Object.keys(m).find(x=>u.includes(x));if(k)return r.fulfill({body:fs.readFileSync(m[k]),contentType:'application/javascript'});if(u.startsWith('file:'))return r.continue();r.abort()});
+fs.writeFileSync('/tmp/pw3.html','<!doctype html><html><head><meta charset=utf8></head><body>'+fs.readFileSync('painel.html','utf8')+'</body></html>');
+await p.goto('file:///tmp/pw3.html');await p.waitForTimeout(800);try{await p.click('#gateIn',{timeout:2000})}catch(e){}await p.waitForTimeout(500);
+await p.evaluate(()=>document.querySelector('.si[data-go=hist]').click());await p.waitForTimeout(600);
+await p.evaluate(()=>document.querySelector('[data-hs-t=rec],#hsTabs .tab[data-t=rec],#hsTabs .tab:nth-child(4)').click());await p.waitForTimeout(400);
+console.log('opts',await p.evaluate(()=>[...document.querySelectorAll('#rcEmp option')].map(o=>o.textContent)));
+await p.selectOption('#rcEmp',{index:1});await p.waitForTimeout(400);
+console.log('sim',await p.evaluate(()=>document.querySelectorAll('input[data-g=s]').length));await p.evaluate(()=>{const c=document.querySelector('input[data-g=s]');c.checked=true;c.dispatchEvent(new Event('change'))});console.log('rows',await p.evaluate(()=>document.querySelectorAll('input[data-rc]').length));
+await p.click('#rcBtn');await p.waitForTimeout(1500);console.log('saved',await p.evaluate(()=>window.__saved));console.log(errs);await b.close()})()

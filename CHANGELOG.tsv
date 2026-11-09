@@ -1,0 +1,42 @@
+v122	05/11/2026	Produtos: coluna “Memória” (armazenamento) deixa de ser lida como Memória RAM e vai para GB (RAM só quando o cabeçalho tem “RAM”); células só com “-”, N/A ou null passam a ser vazias em todos os modelos (Serial, Valor de atacado etc. saíam “-”/0,00)
+v121	05/11/2026	Vendas: nº da venda repetido entre lojas/tipos (Venda x Ordem de serviço, Loja 1 a 4) agora separa as vendas por Nº + Loja + Tipo (antes juntava vendas diferentes); linhas TOTAIS/Linhas/Quantidade do rodapé não viram mais vendas (erro “Nenhum produto informado”); conferência de linhas de itens e de quantidade pelo rodapé
+v120	05/11/2026	Ao confirmar a importação, o aviso no Slack marca (@) o operador que enviou as planilhas ao CC; se o nome não for encontrado com certeza no Slack, aparece só o nome
+v119	05/11/2026	Financeiro: planilha de custos fixos (só o dia do vencimento) agora gera vencimento com o mês de referência; “Custos/Contas a pagar” no nome do arquivo ou da aba define despesa; coluna Tipo de Recorrência deixa de ser lida como tipo; rodapé sem quebra de linha também é lido
+v118	05/11/2026	Conferência em todos os modelos: rodapé em célula única lido em qualquer tipo, mais nomes de total reconhecidos (contas, títulos, pedidos, valor original/bruto) e lista dos totais do rodapé sem campo equivalente
+v117	05/11/2026	Financeiro: valor total passa a ser o Valor Original (igual ao rodapé da planilha de contas), o Nome da Despesa vira Título, e o rodapé em célula única (Quantidade de Contas, Valor Original Total) entra na conferência
+v116	31/10/2026	Bike/Patinete: nova classe no filtro de produtos; planilhas com chassi/motor são lidas como Produtos (chassi no IMEI, motor no Serial, chassi mantém letras), categoria Bike/Patinete; coluna de quantidade com texto (ex.: status do estoque) deixa de ser usada como quantidade
+v115	31/10/2026	Produtos: coluna Origem só sai com código fiscal 0 a 8 (texto livre dava “Data truncated for column 'origem'” em todos os itens); banco de erros e34
+v114	30/10/2026	Exportar: opção de baixar tudo em uma planilha só ou dividir em lotes (padrão: lotes, com aviso quando um arquivo único passa do limite)
+v113	30/10/2026	“Copiar resumo dos filtrados” traz só os totais (planilhas, empresas, registros e planilhas por tipo), sem listar uma por uma
+v112	30/10/2026	Relatório de importações: botão “Copiar resumo” em cada importação e “Copiar resumo dos filtrados”; o resumo fica guardado no registro
+v111	30/10/2026	Botão “Copiar resumo para o canal” (Relatório e Exportar): mensagem pronta com empresa, totais, conferência, linhas descartadas e resultado do piloto
+v110	30/10/2026	CSV/TXT lido como texto (corrige valores 100x/1.000x errados em números brasileiros); desconto de pedido repetido por linha é aplicado uma vez; clientes distintos conta Consumidor final; banco de erros e33
+v109	30/10/2026	Cartões de total (valor em custo/venda etc.): valores grandes não quebram mais em duas linhas
+v108	30/10/2026	Auditoria das linhas: lista toda linha descartada na leitura (com número e motivo), fecha a conta linhas lidas = usadas + descartadas, e bloqueia download/confirmação quando algum total não bate ou há linha sem explicação (liberação exige justificativa, registrada no relatório)
+v107	30/10/2026	Conferência automática: lê o total do rodapé da planilha (ex.: TOTAL DE VENDAS) e compara com o painel; piloto de 20 registros para testar no ERP antes de importar o resto; tarefa pronta para o Linear (projeto ERP Manutenção); busca de planilha no Google Drive; manual sincronizado por CHANGELOG (sync_manual.py)
+v106	30/10/2026	Lotes menores para grandes quantidades: 500 por arquivo (vendas, produtos, serviços, OS) e 1.000 (clientes, fornecedores, financeiro)
+v105	30/10/2026	Vendas: “Histórico de vendas – detalhado” (um bloco por venda) é convertido em tabela de vendas, itens e pagamentos; troco descontado, acréscimo somado ao 1º item; banco de erros e32
+v104	30/10/2026	Vendas: venda sem data recebe a data da anterior (erro “data_venda cannot be null”); quantidade de item só inteira até 1.000 (evita “Qtd. produtos vendidos” absurda); banco de erros e31
+v103	30/10/2026	Planilhas convertidas de PDF com cabeçalho mesclado (estoque/pessoas): colunas agrupadas pelo cabeçalho, corrigindo custo e venda zerados
+v102	30/10/2026	Relatórios convertidos de PDF (ex.: Relatório de Pessoas): colunas repetidas são juntas, cabeçalho de página e rodapés removidos, CÓDIGO não vira CEP, “pessoas” detectado como Clientes
+v101	30/10/2026	Financeiro: cabeçalhos de página (“Relatório emitido em…”, “SITUAÇÃO…”), totais de rodapé e linhas sem data e sem pessoa são descartados
+v100	30/10/2026	Financeiro: linhas de total/rodapé (sem título e sem valor ou data) são descartadas; vencimento vazio usa a competência; banco de erros e28
+v99	30/10/2026	Financeiro: valor total vazio usa o valor pago; linhas sem nenhum valor são listadas como erro (e27)
+v98	30/10/2026	Financeiro: linha sem título recebe título automático (categoria, observações ou “Lançamento - pessoa”); banco de erros e26
+v97	30/10/2026	Financeiro: pagamento só com forma, só com valor ou só com data não gera mais “Valor do pagamento deve ser maior que zero” / “Data do pagamento é obrigatória”; banco de erros e25
+v96	30/10/2026	Produtos: quantidade acima de 1.000.000 é tratada como coluna errada (usa 1 e marca atenção), evitando estoque absurdo no relatório
+v95	30/10/2026	Relatório .xls em HTML (Vendas Realizadas): valores 399,00 não viram mais 39900, várias formas de pagamento na mesma célula são separadas (corrige “Data too long for column descricao”)
+v94	30/10/2026	Descrições acima de 255 caracteres são cortadas (erro “Data too long for column descricao”); verificação e23
+v93	30/10/2026	Trava de valores impossíveis em vendas (quantidade e valor fora do possível viram atenção)
+v92	30/10/2026	Vendas sem produto no relatório: cria item genérico com o valor dos pagamentos; verificação e22
+v91	30/10/2026	Vendas: valor e parcelas escritos no nome da forma de pagamento são separados; verificação e21
+v90	30/10/2026	PDF de OS de várias páginas: não perde mais o último registro de cada página e não cria coluna falsa no cabeçalho (2.172 de 2.172 OS no PDF testado)
+v89	30/10/2026	Código de OS/venda acima do limite do ERP é reduzido automaticamente; nova verificação no banco de erros (e20)
+v88	30/10/2026	PDF de várias páginas: ignora cabeçalho repetido e topo/rodapé do navegador; corrige colunas coladas
+v87	30/10/2026	Leitura de PDF de relatório de OS (células multilinha, código com #, “Criado em”)
+v86	30/10/2026	Nova aba Processos (guia rápido dentro do painel)
+v85	30/10/2026	Conferência automática com o banco de erros na etapa Exportar; manual criado
+v84	—	Banco de erros (aba Gestão)
+v83	—	Etapas do Customer Center automáticas
+v82	—	Recibo com todas as planilhas da loja e seleção
+v81	—	Financeiro: tipo de movimentação obrigatório

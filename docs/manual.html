@@ -1,0 +1,386 @@
+<title>Manual do Organizador Mercadophone</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--bg:#f7f8fc;--card:#fff;--fg:#151826;--mut:#626a80;--line:#e3e6f0;--acc:#4f5df5;--accbg:#eceefe;--ok:#14803c;--okbg:#e3f6e9;--warn:#8a5a00;--warnbg:#fff1d6;--bad:#a4262c;--badbg:#fde4e4;--code:#eef0f7;--shadow:0 1px 2px rgba(21,24,38,.05),0 8px 24px rgba(21,24,38,.05)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1220;--card:#181c2e;--fg:#eef0fa;--mut:#a3abc4;--line:#2a3050;--acc:#8b96ff;--accbg:#232a55;--ok:#6fd49a;--okbg:#17332a;--warn:#f0c46a;--warnbg:#3a2f14;--bad:#ff9a9f;--badbg:#3d1d22;--code:#222741;--shadow:none;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1220;--card:#181c2e;--fg:#eef0fa;--mut:#a3abc4;--line:#2a3050;--acc:#8b96ff;--accbg:#232a55;--ok:#6fd49a;--okbg:#17332a;--warn:#f0c46a;--warnbg:#3a2f14;--bad:#ff9a9f;--badbg:#3d1d22;--code:#222741;--shadow:none;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.65 Inter,system-ui,-apple-system,Segoe UI,sans-serif;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:0}
+.wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:40px;padding-block:32px 80px}
+nav{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));align-self:start;font-size:14px;max-height:calc(100vh - 32px);overflow:auto}
+nav b{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:0 0 10px}
+nav a{display:block;padding:6px 10px;border-radius:8px;color:var(--mut);text-decoration:none;line-height:1.35}
+nav a:hover{background:var(--accbg);color:var(--fg)}
+nav a.sub{padding-left:22px;font-size:13px}
+main{min-width:0}
+header.hero{padding:8px 0 28px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);font-weight:700}
+h1{font-size:clamp(30px,5vw,44px);line-height:1.1;margin:10px 0 12px;letter-spacing:-.02em;text-wrap:balance;font-weight:800}
+.lead{font-size:18px;color:var(--mut);max-width:62ch;margin:0}
+.meta{margin-top:16px;font-size:13px;color:var(--mut);display:flex;gap:8px 16px;flex-wrap:wrap}
+.meta span{background:var(--accbg);padding:3px 10px;border-radius:999px}
+section{padding-top:36px;scroll-margin-top:16px}
+h2{font-size:26px;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance;font-weight:750;line-height:1.2}
+h3{font-size:19px;margin:28px 0 6px;font-weight:700}
+p{margin:10px 0;max-width:72ch}
+ul,ol{max-width:72ch;padding-left:22px;margin:10px 0}
+li{margin:5px 0}
+.step{display:flex;gap:14px;align-items:flex-start;margin-top:30px}
+.n{flex:none;width:34px;height:34px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px}
+.step h3{margin:3px 0 0}
+fig,figure{margin:16px 0}
+figure{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+figure img{display:block;width:100%;height:auto}
+figcaption{padding:10px 14px;font-size:13.5px;color:var(--mut);border-top:1px solid var(--line)}
+.box{border-radius:12px;padding:12px 16px;margin:16px 0;max-width:72ch;font-size:15px}
+.box b:first-child{display:block;margin-bottom:2px}
+.tip{background:var(--accbg)}.ok{background:var(--okbg)}.warn{background:var(--warnbg)}.bad{background:var(--badbg)}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+code,kbd{background:var(--code);padding:1px 6px;border-radius:6px;font:13.5px ui-monospace,SFMono-Regular,Menlo,monospace}
+.btnx{display:inline-block;background:var(--fg);color:var(--bg);padding:2px 10px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px 16px;margin:10px 0;max-width:80ch}
+summary{cursor:pointer;font-weight:600;padding:10px 0}
+details p{margin-top:0}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:1px 9px;border-radius:999px}
+.pill.o{background:var(--okbg);color:var(--ok)}.pill.e{background:var(--badbg);color:var(--bad)}.pill.a{background:var(--warnbg);color:var(--warn)}
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);gap:0}nav{position:static;max-height:none;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:12px}nav a.sub{display:none}}
+</style>
+
+<div class="wrap">
+<nav aria-label="Índice">
+<b>Neste manual</b>
+<a href="#visao">1. O que é o painel</a>
+<a href="#acesso">2. Como entrar</a>
+<a href="#passo">3. Passo a passo</a>
+<a class="sub" href="#p1">Arquivo</a><a class="sub" href="#p2">Tipo e colunas</a><a class="sub" href="#p3">Verificação</a><a class="sub" href="#p4">Antes e depois</a><a class="sub" href="#p5">Relatório</a><a class="sub" href="#p6">Exportar</a>
+<a href="#tipos">4. Tipos de planilha</a>
+<a href="#padroes">5. Padronização automática</a>
+<a href="#banco">6. Banco de erros</a>
+<a href="#ia">7. Assistente IA</a>
+<a href="#cc">8. Fila do Customer Center</a>
+<a href="#hist">9. Relatório de importações</a>
+<a href="#proc">9b. Aba Processos</a><a href="#conversor">9c. Conversor</a>
+<a href="#recibo">10. Recibo</a>
+<a href="#faq">11. Problemas comuns</a>
+<a href="#versoes">12. Histórico do manual</a>
+</nav>
+
+<main>
+<header class="hero">
+<div class="eyebrow">Guia completo · Migração de dados</div>
+<h1>Manual do Organizador Mercadophone</h1>
+<p class="lead">Como transformar a planilha de um cliente no modelo de importação do MercadoPhone: do arquivo bruto até a importação confirmada, sem repetir os erros que já recusaram planilhas antes.</p>
+<div class="meta"><span>Versão do painel: v134</span><span>Atualizado em 09/11/2026</span><span>Prints reais do painel</span></div>
+</header>
+
+<section id="visao">
+<h2>1. O que é o painel</h2>
+<p>O Organizador recebe a planilha que o cliente exporta do sistema antigo (Excel, CSV, PDF com texto, arquivos legados ou um <code>.zip</code> com várias planilhas), reconhece o tipo, ajusta tudo para o <b>padrão dos modelos de importação do MercadoPhone</b> e mostra o que mudou e o que ainda precisa de atenção.</p>
+<p>O processamento acontece <b>no seu navegador</b>. Nada é enviado para o ERP sozinho: você baixa a planilha pronta (ou ela segue para o Google Drive ao confirmar) e importa no MercadoPhone.</p>
+<div class="tbl"><table>
+<tr><th>Você faz</th><th>O painel faz</th></tr>
+<tr><td>Escolhe a loja e sobe a planilha</td><td>Detecta o tipo e liga cada coluna do cliente à coluna do modelo</td></tr>
+<tr><td>Confere as colunas e os avisos</td><td>Padroniza nomes, datas, valores, EAN, GB, formas de pagamento</td></tr>
+<tr><td>Compara os totais com o sistema antigo</td><td>Gera o Relatório de Validação e confere com o banco de erros</td></tr>
+<tr><td>Confirma a importação</td><td>Envia ao Drive, registra no relatório, avisa no Slack e atualiza a etapa no Customer Center</td></tr>
+</table></div>
+<figure><img src="img/03-arquivo-carregado.png" alt="Tela do painel com a planilha carregada" loading="lazy"><figcaption>Visão geral: menu lateral com as 6 etapas numeradas (Importação) e as áreas de apoio (Gestão).</figcaption></figure>
+</section>
+
+<section id="acesso">
+<h2>2. Como entrar</h2>
+<ol>
+<li>Abra o link do painel já logado no claude.ai com a <b>conta da Mercado Phone</b>.</li>
+<li>Na tela de boas-vindas, clique em <span class="btnx">Entrar no painel</span>.</li>
+<li>O botão <span class="btnx">Sair</span> (topo) limpa os dados da sessão neste navegador. <span class="btnx">Tema</span> alterna claro e escuro.</li>
+</ol>
+<div class="box tip"><b>Quem vê o quê</b>Cada pessoa vê só as próprias importações. O gestor vê as de toda a equipe. Se aparecer “Acesso não autorizado”, peça a um gestor para incluir sua conta.</div>
+<figure><img src="img/01-entrada.png" alt="Tela inicial do painel" loading="lazy"><figcaption>Depois de entrar, você cai na etapa 1 (Arquivo).</figcaption></figure>
+</section>
+
+<section id="passo">
+<h2>3. Passo a passo da importação</h2>
+<p>Siga as seis etapas do menu, de cima para baixo. As bolinhas ficam verdes conforme você avança e um número em laranja indica avisos pendentes naquela etapa.</p>
+
+<div class="step" id="p1"><div class="n">1</div><div><h3>Arquivo: dados da loja e planilha</h3></div></div>
+<ol>
+<li>Preencha <b>Empresa do cliente</b> (vira o nome da pasta no Drive e aparece nos relatórios).</li>
+<li>Preencha o <b>ID da loja (Unit ID)</b>, o <b>Responsável pela migração</b> e o <b>Sistema de origem</b> (ex.: Vhsys, Fone Ninja). <i>Dica:</i> se a loja veio da Fila do CC, tudo isso já vem preenchido.</li>
+<li>Arraste a planilha para a área tracejada ou clique para escolher. Aceita <code>.xlsx</code>, <code>.xls</code>, <code>.csv</code>, <code>.pdf</code> (com texto), <code>.ods</code>, <code>.dbf</code>, <code>.dat</code> e <code>.zip</code>.</li>
+<li>Se enviar um <b>.zip</b>, o painel lista todas as planilhas dentro (inclusive as sem método de importação mapeado) antes de processar.</li>
+</ol>
+<figure><img src="img/02-arquivo-vazio.png" alt="Etapa Arquivo vazia" loading="lazy"><figcaption>Etapa 1 antes de subir o arquivo. O aviso amarelo mostra dados de exemplo: eles somem quando você sobe a planilha real.</figcaption></figure>
+<figure><img src="img/03-arquivo-carregado.png" alt="Etapa Arquivo com planilha" loading="lazy"><figcaption>Com a planilha carregada, aparecem o nome do arquivo, linhas, colunas e o bloco <b>Preparar dados</b> (repetidos, filtros e regras da empresa).</figcaption></figure>
+<h3>Preparar dados: repetidos, filtros e regras</h3>
+<ul>
+<li><b>Linhas repetidas:</b> manter todas, remover idênticas ou remover repetidos por uma coluna. <i>Cuidado:</i> em vendas, o mesmo item lançado duas vezes na mesma venda também é “idêntico”.</li>
+<li><b>Remover cancelados</b> e <b>filtro por faixa</b> (ex.: datas). Nada é removido sem você marcar.</li>
+<li><b>Regras da empresa:</b> forma de pagamento padrão, vendedor padrão e “custo ausente = valor de venda”. Use <span class="btnx">Salvar perfil desta empresa</span> para reaproveitar nas próximas planilhas.</li>
+</ul>
+
+<div class="step" id="p2"><div class="n">2</div><div><h3>Tipo e colunas</h3></div></div>
+<p>O painel compara as colunas do arquivo com cada modelo e mostra a porcentagem de similaridade. O melhor fica selecionado.</p>
+<ul><li>Se detectou o tipo errado, <b>clique no cartão certo</b>.</li>
+<li>Logo abaixo, a lista de colunas do modelo mostra de qual coluna do cliente cada campo vem. Corrija pelo seletor se estiver trocado. O painel <b>lembra o mapeamento por sistema de origem</b> e já aplica nas próximas lojas daquele sistema.</li></ul>
+<figure><img src="img/04-tipo-colunas.png" alt="Tipos de planilha detectados" loading="lazy"><figcaption>Produtos / Estoque detectado com 77% de similaridade. Clique em outro cartão para trocar.</figcaption></figure>
+<div class="box warn"><b>Campos obrigatórios</b>Campo obrigatório sem coluna ligada vira erro na Verificação. Se o dado não existe no arquivo, o painel pergunta/avisa em vez de inventar.</div>
+
+<div class="step" id="p3"><div class="n">3</div><div><h3>Verificação</h3></div></div>
+<p>Lista o que o painel <b>ajustou sozinho</b> (ex.: nome padronizado, data corrigida) e o que <b>pede atenção</b> (ex.: valor inválido, campo vazio). Cada linha mostra a posição original, o que havia e o que ficou.</p>
+<ul>
+<li><b>Ajustado:</b> conferir por amostragem.</li>
+<li><b>Atenção:</b> resolva antes de exportar: corrija na planilha de origem e suba de novo, ou peça ao <a href="#ia">Assistente IA</a>.</li>
+</ul>
+<figure><img src="img/05-verificacao.png" alt="Verificação de produtos" loading="lazy"><figcaption>Verificação de uma planilha de estoque.</figcaption></figure>
+<figure><img src="img/09-verificacao-vendas.png" alt="Verificação de vendas" loading="lazy"><figcaption>Em vendas, uma linha “atenção” (valor do item inválido) impede a planilha de ficar 100% limpa.</figcaption></figure>
+
+<div class="step" id="p4"><div class="n">4</div><div><h3>Antes e depois</h3></div></div>
+<p>Mostra lado a lado a planilha original e como ela ficou, com os campos alterados destacados. Use para a conferência visual rápida e para mostrar ao cliente o que mudou.</p>
+<figure><img src="img/06-antes-depois.png" alt="Comparação antes e depois" loading="lazy"><figcaption>Original à esquerda, resultado à direita.</figcaption></figure>
+
+<div class="step" id="p5"><div class="n">5</div><div><h3>Relatório de validação</h3></div></div>
+<p>É a conferência de números que o cliente pode bater com o sistema antigo:</p>
+<ul><li><b>Quantidade total de clientes</b> cadastrados</li><li><b>Quantidade total de vendas</b> processadas</li><li><b>Faturamento / valor total acumulado</b></li><li><b>Quantidade de produtos distintos</b></li></ul>
+<p>A <b>Conferência de totais</b> compara os totais lidos da planilha original com o processado. Se o sistema de origem mostra outro total, digite-o na coluna “Digitado” e veja a diferença. Use <span class="btnx">Copiar relatório</span> para colar no atendimento.</p>
+<figure><img src="img/07-relatorio.png" alt="Relatório de validação" loading="lazy"><figcaption>Relatório de produtos.</figcaption></figure>
+<figure><img src="img/10-relatorio-vendas.png" alt="Relatório de vendas" loading="lazy"><figcaption>Relatório de vendas: vendas, itens, pagamentos e faturamento.</figcaption></figure>
+
+<div class="step" id="p6"><div class="n">6</div><div><h3>Exportar e registrar</h3></div></div>
+<p>No topo da etapa aparece a <b>Conferência com o banco de erros</b>: o painel passa a planilha por todas as regras de erros já ocorridos e responde se pode importar.</p>
+<div class="tbl"><table>
+<tr><th>Resultado</th><th>O que fazer</th></tr>
+<tr><td><span class="pill o">OK</span> “Nenhum erro conhecido encontrado”</td><td>Pode importar.</td></tr>
+<tr><td><span class="pill e">Erro</span> “Corrija antes de importar”</td><td>O ERP vai recusar essas linhas. Veja os exemplos (linha) e corrija.</td></tr>
+<tr><td><span class="pill a">Aviso</span></td><td>Não bloqueia, mas confira.</td></tr>
+</table></div>
+<figure><img src="img/11-conferencia-erros.png" alt="Conferência com banco de erros com um erro" loading="lazy"><figcaption>Exemplo com 1 erro: a linha 1 está com valor do item inválido. As demais 9 verificações passaram.</figcaption></figure>
+<figure><img src="img/08-exportar.png" alt="Exportar e registrar" loading="lazy"><figcaption>Planilha de produtos sem erros conhecidos.</figcaption></figure>
+<p>Em seguida, o bloco <b>Exportar e registrar</b>:</p>
+<ol>
+<li><span class="btnx">Baixar planilha</span> (ou <b>Baixar lote 1 de N</b>): o limite é de <b>500 vendas por arquivo</b> (produtos, serviços e OS também 500; clientes, fornecedores e financeiro 1.000); acima disso o painel divide em lotes. Cada download pede sua confirmação.</li>
+<li><span class="btnx">Confirmar importação</span> envia os arquivos para o Drive em <code>Meu Drive / (pasta raiz) / Empresa</code> (as pastas são criadas se não existirem), registra no relatório e avisa no Slack. Se o Drive falhar, use <span class="btnx">Reenviar ao Drive</span>.</li>
+<li>Se enviou várias planilhas na fila, o botão vira <b>Confirmar importação das N planilhas</b>.</li>
+<li>Há também <span class="btnx">Exportar Excel</span>, <span class="btnx">Exportar PDF</span> e <span class="btnx">Exportar apresentação (PPTX)</span> do relatório. A apresentação é <b>um slide só</b>: no campo <b>Período</b> escolha a semana (últimas 12) ou o mês (últimos 6): o dashboard inteiro (indicadores, gráficos, tabelas, comparativo e sistemas) é atualizado para o período escolhido e o slide exportado usa o mesmo período. Ele traz o resumo do período (importações, registros, empresas, valor conferido, % sem pendência e confirmadas no Slack, cada um comparado com o período anterior), as <b>planilhas mais importadas</b> por tipo, os <b>sistemas que mais importamos</b> (no mês, %, lojas e histórico) e as pendências do mês.</li>
+</ol>
+<div class="box ok"><b>Etapa do Customer Center automática</b>Quando a loja veio da Fila do CC, o painel atualiza a etapa sozinho: ao processar vai para <i>Em andamento</i> e, ao confirmar a última planilha, para <i>Conferência com o cliente</i>. Detalhes na seção 8.</div>
+</section>
+
+<section id="tipos">
+<h2>4. Tipos de planilha</h2>
+<div class="tbl"><table>
+<tr><th>Tipo</th><th>Serve para</th><th>Cuidados principais</th></tr>
+<tr><td>Produtos / Estoque</td><td>Cadastro e estoque</td><td>Nome padronizado, GB separado, EAN até 13 dígitos, IMEI com 15, linhas vazias do modelo ignoradas</td></tr>
+<tr><td>Vendas</td><td>Venda, itens e pagamentos</td><td>Código de associação único, ao menos um produto por venda, data válida, pagamentos batendo com o total</td></tr>
+<tr><td>Clientes</td><td>Cadastro de clientes</td><td>Datas dd/mm/aaaa, documentos e telefones limpos</td></tr>
+<tr><td>Fornecedores</td><td>Cadastro de fornecedores</td><td>Campos obrigatórios do modelo</td></tr>
+<tr><td>Serviços</td><td>Catálogo de serviços</td><td>Valores numéricos</td></tr>
+<tr><td>Ordens de serviço</td><td>Histórico de OS</td><td>Datas, status, forma de pagamento e vendedor padrão</td></tr>
+<tr><td>Financeiro</td><td>Contas a pagar e receber</td><td><b>Tipo de movimentação obrigatório</b> (1 = receita, 2 = despesa)</td></tr>
+</table></div>
+</section>
+
+<section id="padroes">
+<h2>5. O que o painel padroniza sozinho</h2>
+<h3>Nomes de produtos</h3>
+<p>Capitalização e grafia oficiais do mercado: <code>iPhone 17 Pro Max</code>, <code>Redmi Note 7</code>, <code>Samsung Galaxy S25</code>. O painel separa texto colado (<code>IPHONE17PROMAX</code> vira <code>iPhone 17 Pro Max</code>), coloca o prefixo “iPhone” quando o arquivo só traz “17 Pro Max” e remove caracteres estranhos. Palavras como <b>Atacado</b> saem do nome e vão para a observação.</p>
+<h3>Capacidade (GB)</h3>
+<p>A coluna GB recebe só a capacidade. Se o cliente colocou o nome do aparelho na coluna de GB, o painel troca as colunas sozinho.</p>
+<h3>Datas</h3>
+<p>Saída sempre em <code>dd/mm/aaaa</code>. Se o arquivo todo usa mês-dia-ano (ex.: <code>04-25-24</code>), o painel detecta e converte.</p>
+<h3>Vendas com vários itens e pagamentos</h3>
+<p>O <b>Código de associação</b> liga a venda, os produtos e as formas de pagamento da mesma venda: Venda #123 → Produto #123 → Pagamento #123. O código precisa ser numérico e único por venda.</p>
+<h3>Forma de pagamento com valor escrito junto</h3>
+<p>Quando o cliente traz algo como <code>R$ 1399.00 DINHEIRO</code> ou <code>2 X R$ 89.50 CARTÃO CRÉDITO VISA</code>, o painel separa: a forma fica só <code>DINHEIRO</code>, o valor vai para a coluna Valor (parcelado: 2 × 89,50 = 179,00) e as parcelas vão no Detalhe. Se a venda tem um item sem valor, usa o total dos pagamentos. “MÚLTIPLAS” não dá para dividir e fica como atenção.</p>
+<h3>Vendas sem produto no relatório</h3>
+<p>O ERP recusa venda sem produto (<i>“Venda código X: Nenhum produto informado”</i>). Se o relatório do cliente traz só o código e o pagamento, o painel cria em cada venda o item <code>Produto não informado</code> (quantidade 1, valor = total dos pagamentos) e avisa na Verificação e na conferência (e22). Se o cliente tiver o relatório de itens vendidos, use ele para trocar o item genérico.</p>
+<h3>Financeiro</h3>
+<p>O tipo de movimentação é lido de palavras como <i>receita, receber, entrada</i> (→ 1) e <i>despesa, pagar, saída</i> (→ 2). Sem texto, usa o sinal do valor (negativo = despesa) ou o nome do arquivo. Se não der para saber, aparece aviso para você preencher.</p>
+</section>
+
+<section id="banco">
+<h2>6. Banco de erros</h2>
+<p>Menu <b>Gestão → Banco de erros</b>. É a lista de tudo que já deu problema na importação, com <b>causa</b>, <b>regra aplicada</b> e situação. Alimenta a conferência da etapa 6.</p>
+<ul>
+<li>Para registrar um erro novo, descreva o erro do ERP e clique em <span class="btnx">Registrar e aprender</span>: ele entra na lista e passa a valer nas próximas conferências.</li>
+<li><span class="btnx">Copiar lista</span> e <span class="btnx">Baixar .xlsx</span> exportam o banco.</li>
+<li>Erros ainda sem solução ficam como “Pendente” até termos o arquivo do cliente.</li>
+</ul>
+<figure><img src="img/14-banco-de-erros.png" alt="Banco de erros" loading="lazy"><figcaption>Banco de erros com os casos já ocorridos.</figcaption></figure>
+</section>
+
+<section id="ia">
+<h2>7. Assistente IA</h2>
+<p>Menu <b>Assistente IA</b>. Converse sobre o erro (ex.: “Venda código 8: Nenhum produto informado”) e ele ajusta a planilha em andamento: lê linhas, procura valores, edita células, muda o mapeamento de colunas e as regras da empresa.</p>
+<ol>
+<li>Cole a mensagem de erro do ERP e envie.</li>
+<li>Ele mostra o que alterou. Na primeira vez, o claude.ai pede sua permissão para o assistente funcionar.</li>
+<li>Não gostou? <b>Desfazer</b> volta o último ajuste. <b>Nova conversa</b> limpa o chat.</li>
+</ol>
+<div class="box warn"><b>Sempre confira</b>O assistente só mexe na planilha aberta no painel, nunca no ERP. Depois dos ajustes, olhe de novo a etapa 6.</div>
+<figure><img src="img/12-assistente-ia.png" alt="Assistente IA" loading="lazy"><figcaption>Tela do Assistente IA.</figcaption></figure>
+</section>
+
+<section id="cc">
+<h2>8. Fila do Customer Center</h2>
+<p>Menu <b>Fila do CC</b>. Lista os pedidos de migração em aberto, com prazo de <b>5 dias úteis</b> (do recebimento dos dados até a confirmação no painel). Ao escolher a loja, empresa, Unit ID, responsável e sistema de origem são preenchidos.</p>
+<div class="tbl"><table>
+<tr><th>Etapa no CC</th><th>Quando muda</th></tr>
+<tr><td>Solicitada</td><td>Cliente pediu a migração</td></tr>
+<tr><td>Dados recebidos</td><td>Equipe recebeu os arquivos</td></tr>
+<tr><td>Em andamento</td><td>Automático: ao processar a planilha da loja no painel</td></tr>
+<tr><td>Conferência com o cliente</td><td>Automático: ao confirmar a última planilha</td></tr>
+<tr><td>Concluída</td><td>Depois que o cliente conferir</td></tr>
+</table></div>
+<p>O painel também permite <b>Processar lote em sequência</b> (várias lojas marcadas) e <b>Copiar mensagem para o cliente</b> quando falta planilha.</p>
+<figure><img src="img/15-fila-cc.png" alt="Fila do Customer Center" loading="lazy"><figcaption>Fila do CC (vazia neste ambiente de teste; no uso real mostra os pedidos).</figcaption></figure>
+</section>
+
+<section id="hist">
+<h2>9. Relatório de importações</h2>
+<p>Menu <b>Gestão → Relatório de importações</b>. Mostra o que foi importado, por empresa, tipo e responsável: importações confirmadas, empresas, registros, valor movimentado, última importação, comparativo semanal/mensal e % no prazo. O gestor filtra por usuário.</p>
+<figure><img src="img/13-historico.png" alt="Relatório de importações" loading="lazy"><figcaption>Relatório da equipe.</figcaption></figure>
+</section>
+
+<section id="conversor">
+<h2>9c. Conversor de planilhas</h2>
+<p>Menu <b>Importação → Conversor</b>. Serve para abrir qualquer arquivo que o cliente mandar, ver a tabela que ele contém e baixar a versão convertida, sem precisar passar pelo fluxo completo.</p>
+<ol>
+<li><b>Envie os arquivos</b> (vários de uma vez): planilhas (.xlsx, .xls, .ods, .csv), binários/legados (.dbf, .dat, .bin ou sem extensão), PDF com texto, <b>PDF escaneado e imagens</b> (leitura por OCR com IA) e .zip com vários arquivos.</li>
+<li>Cada <b>tabela encontrada</b> aparece em um cartão, com linhas, colunas, como foi lida e o <b>tipo detectado</b> (Clientes, Produtos, Vendas…). Troque o tipo no seletor se estiver errado. Use <b>Ver prévia</b> para conferir as primeiras linhas.</li>
+<li>Em <b>Converter para</b> escolha o formato: <b>.xls</b> (Excel 97-2003, padrão), <b>.xlsx</b> ou <b>.csv</b>. O botão <b>Baixar</b> de cada cartão entrega só aquela tabela; <b>Baixar todas as planilhas (.zip)</b> entrega todas em um arquivo; <b>Baixar todas, uma por vez</b> baixa cada uma separada (pede a confirmação de cada download). O .xls aceita até 65.536 linhas: acima disso o painel entrega em .xlsx. Se o aviso de salvar não abrir depois de montar o .zip, aparece o botão <b>Salvar o .zip pronto</b>: clique nele para abrir o aviso de novo. Se alguma tabela não couber no .xls (mais de 65.536 linhas), ela é salva como .xlsx dentro do .zip.</li>
+<li><b>Baixar por tipo e modelo (.zip)</b> gera os arquivos já no modelo de importação do MercadoPhone, em uma pasta por tipo, e mostra o resumo (registros, ajustados, com atenção).</li>
+<li><b>Abrir no painel</b> leva a tabela para o fluxo normal (Tipo e colunas → … → Relatório), que é onde acontece a conferência de totais.</li>
+</ol>
+<p><b>Cuidados:</b> os arquivos “por tipo e modelo” <b>não passam pela conferência de totais</b>; para importar de verdade, abra a origem pelo fluxo normal. Dados lidos por <b>OCR</b> podem ter erros de leitura: revise a prévia. PDFs escaneados leem até as 40 primeiras páginas. Se o OCR não estiver liberado na abertura do painel, o Conversor avisa e os demais formatos continuam funcionando.</p>
+<figure><img src="img/17-conversor.png" alt="Aba Conversor" loading="lazy"><figcaption>Conversor com tabelas encontradas em vários arquivos.</figcaption></figure>
+</section>
+<section id="proc">
+<h2>9b. Aba Processos</h2>
+<p>Menu <b>Gestão → Processos</b>. Traz dentro do próprio painel o resumo deste manual em tópicos que abrem e fecham: fluxo geral, cada uma das 6 etapas, padronização automática, o que fazer quando o ERP recusa, etapas do CC e recibo. O botão <span class="btnx">Abrir manual completo (com imagens)</span> leva a esta página.</p>
+<figure><img src="img/16-processos.png" alt="Aba Processos" loading="lazy"><figcaption>Aba Processos dentro do painel.</figcaption></figure>
+</section>
+
+<section id="recibo">
+<h2>10. Recibo de importação</h2>
+<p>O botão <span class="btnx">Gerar recibo (PDF)</span> lista <b>todas as planilhas importadas da loja</b> (pelo Unit ID ou nome parecido), com caixinhas para marcar o que entra no recibo. Se a loja tem planilhas de várias empresas parecidas, escolha a empresa no seletor e confira as marcadas antes de gerar.</p>
+</section>
+
+<section id="faq">
+<h2>11. Problemas comuns</h2>
+<details><summary>O ERP recusou a planilha. O que faço?</summary><p>Cole a mensagem de erro no <a href="#ia">Assistente IA</a> ou registre no <a href="#banco">Banco de erros</a>. Corrija, gere de novo e confira a etapa 6 até aparecer “Nenhum erro conhecido”.</p></details>
+<details><summary>“Linhas 16 a 19: O tipo de movimentação é obrigatório”</summary><p>Financeiro sem tipo. O painel deduz pelo texto, pelo sinal do valor ou pelo nome do arquivo. Se avisar que não identificou, preencha 1 (receita) ou 2 (despesa).</p></details>
+<details><summary>Estoque saiu fora do padrão (GB com nome de aparelho)</summary><p>Confira na etapa 2 se a coluna Modelo/Nome está ligada à coluna certa. O painel corrige quando o nome está na coluna de GB.</p></details>
+<details><summary>Datas aparecem trocadas (mês e dia)</summary><p>O painel detecta arquivos mês-dia-ano. Se ainda assim ficar errado, mapeie a coluna de data manualmente na etapa 2 ou peça ao Assistente IA.</p></details>
+<details><summary>Venda sem produto / produto sem valor</summary><p>Se o relatório do cliente não traz produto algum, o painel cria o item “Produto não informado” com o valor dos pagamentos. Confira o código de associação (numérico e único). Quando só o primeiro item traz o valor da venda, falta a fonte dos valores por item: peça ao cliente o relatório de itens vendidos.</p></details>
+<details><summary>No recibo apareceu só uma planilha</summary><p>Marque as demais na lista do recibo; o painel lista todas as da loja pelo Unit ID e por nomes parecidos.</p></details>
+<details><summary>Subi um PDF e o painel não puxou os dados (ou veio tudo quebrado)</summary><p>O painel lê PDF que tenha texto (não serve PDF escaneado/imagem). Relatórios de OS (inclusive PDF de várias páginas impresso pelo navegador, com cabeçalho repetido e data/rodapé em cada página), com células de várias linhas e códigos com <code>#</code> (ex.: <code>#11963182423</code>) agora são lidos corretamente: o <code>#</code> sai do código e o cabeçalho “Criado em:” vira Data Criação. Se ainda vier errado, confira as colunas na etapa 2 ou peça a planilha original (.xlsx) ao cliente.</p></details>
+<details><summary>ERP: “Numeric value out of range … column 'codigo'”</summary><p>O código da OS/venda passou do limite do ERP (2.147.483.647, ou seja, 10 dígitos). O painel corrige sozinho: se todos os códigos terminam igual (ex.: <code>#13934282423</code> = OS 139342 + sufixo fixo 82423), tira o sufixo e a OS vira <code>139342</code>. Sem sufixo comum, renumera em sequência. O número original fica na Observação interna (“Nº original da OS”) e a Verificação lista cada troca.</p></details>
+<details><summary>O total de registros ficou menor que o do PDF</summary><p>Confira o card certo na etapa 5: <b>Quantidade total de vendas</b> mostra o total de OS (ex.: “2.172 OS”); <b>Quantidade total de clientes</b> conta cada cliente uma vez e por isso é menor. Se o total de OS for menor que o do PDF, envie o PDF para ajuste.</p></details>
+<details><summary>Relatório com valores impossíveis (quatrilhões, quantidade gigante)</summary><p>Quase sempre uma coluna do cliente foi ligada ao campo errado (ex.: código, telefone ou texto lido como quantidade/valor). O painel agora marca como <b>atenção</b> qualquer quantidade acima de 100.000 ou valor acima de R$ 10.000.000 e não deixa o número absurdo entrar no relatório. Corrija na etapa 2 (Tipo e colunas) a coluna ligada a Quantidade e Valor Unitário.</p></details>
+<details><summary>ERP: “Data too long for column 'descricao'”</summary><p>Alguma descrição ou nome passou de 255 caracteres (ex.: relato completo do cliente no campo de descrição do serviço). O painel corta em 255 (no último espaço) em Serviços, Produtos, OS (serviço, peça, aparelho) e nos produtos das vendas, e a Verificação lista cada corte. Se o texto completo for importante, coloque-o em Observação na planilha de origem.</p></details>
+<details><summary>O Drive falhou ao confirmar</summary><p>Use <span class="btnx">Reenviar ao Drive</span>. A importação já fica registrada no relatório.</p></details>
+<details><summary>Planilha .xls que na verdade é HTML (valores gigantes ou erro “descricao”)</summary><p>Alguns sistemas exportam “.xls” que é uma página HTML. O painel agora lê esses arquivos como texto: “399,00” fica R$ 399,00, a quantidade “1,000000” fica 1, e uma célula de Pagamento com várias formas (“R$ 149,90 CARTÃO… R$ 149,90 CARTÃO…”) vira uma linha por forma na aba Pagamentos. Confira na Verificação a mensagem “várias formas de pagamento na mesma célula”.</p></details>
+<details><summary>Financeiro: “Valor do pagamento deve ser maior que zero” ou “Data do pagamento é obrigatória”</summary><p>O ERP considera que existe pagamento quando a linha tem forma, valor pago ou data de pagamento. O painel agora garante o conjunto: sem valor e sem data pagos, a forma é removida e o título fica em aberto; valor pago sem data usa o vencimento; data sem valor usa o valor do título. A Verificação lista cada ajuste.</p></details>
+<details><summary>Financeiro: “Título é obrigatório”</summary><p>Quando a planilha não traz título, o painel usa a categoria, as observações ou “Lançamento - nome da pessoa”. Cada caso aparece na Verificação; se quiser outro texto, preencha a coluna de título antes de enviar.</p></details>
+<details><summary>Financeiro: “Valor é obrigatório” ou “Valor deve ser maior que zero”</summary><p>O painel usa o valor pago quando o valor total está vazio. Se a linha não tem valor nenhum, ela aparece como erro na Verificação (e27): peça o valor ao cliente ou remova a linha da planilha, pois o ERP não aceita lançamento sem valor.</p></details>
+<details><summary>Financeiro: erros repetidos em blocos (“Data de vencimento é obrigatória”, “Valor é obrigatório”)</summary><p>Quando o erro se repete em blocos regulares (ex.: linhas 41, 75, 109…), são linhas de total, quebra de página ou rodapé do relatório, não lançamentos. O painel descarta cabeçalhos de página (“Relatório emitido em…”, “SITUAÇÃO…”), totais de rodapé e linhas sem data e sem pessoa, e mostra quantas foram removidas. Sem vencimento, usa a data de competência/emissão.</p></details>
+<details><summary>Estoque, pessoas ou outro relatório convertido de PDF (colunas repetidas, custo/venda zerados, cabeçalho em toda página)</summary><p>Quando o cabeçalho tem rótulos mesclados (o mesmo texto em colunas vizinhas), o painel agrupa as colunas pelo cabeçalho e pega o primeiro valor de cada bloco; isso corrige custo e venda zerados. O painel junta colunas de texto repetidas (células mescladas), usa como cabeçalho a linha com mais rótulos diferentes e remove cabeçalhos e rodapés repetidos a cada página (“Relatório emitido em…”, nome da empresa). Linhas com documento mas sem nome ficam como atenção (“sem nome”).</p></details>
+<details><summary>Vendas: “Column data_venda cannot be null” e quantidade de produtos vendidos absurda</summary><p>Venda sem data (ou com data inválida) usa a data da venda anterior, ou a de hoje se for a primeira, e a Verificação avisa. Quantidade de item precisa ser inteira e até 1.000; valores com decimais ou enormes (coluna de valor lida como quantidade) viram 1 e ficam como atenção, para você conferir a coluna de quantidade no mapeamento.</p></details>
+<details><summary>Histórico de vendas detalhado (um bloco por venda)</summary><p>Relatórios que trazem NÚMERO, DATA, CLIENTE e VENDEDOR no topo e, abaixo, a lista de itens e pagamentos, são convertidos automaticamente: cada bloco vira uma venda. O troco é descontado do pagamento em dinheiro, o acréscimo (juros) é somado ao valor do 1º item e anotado em Observações, e vendas sem itens listados recebem o item “Produto não informado” com o total da venda. Se o número da venda se repete (PDV/NFCE), o painel renumera e guarda o número original em Observações. Esse relatório normalmente não traz custo: o custo fica zerado.</p></details>
+<details><summary>Vendas com valores gigantes vindas de CSV (4.290,00 virou 4,29 ou 1,00 virou 100)</summary><p>Acontecia quando o CSV tinha números no formato brasileiro e o leitor os tratava como número comum. Desde a v110 todo CSV/TXT é lido como texto e convertido pelo padrão brasileiro. Também corrigimos o desconto: colunas como “Valor Desconto Pedido” (o mesmo valor em todas as linhas do pedido) agora são descontadas uma vez só, no primeiro item. Confira na etapa 5 que “Faturamento” e “Vendas” batem com a planilha.</p></details>
+<details><summary>Copiar um resumo para mandar no canal</summary><p>No <b>Relatório de importações</b> (aba Registro de dados), cada importação tem o botão <span class="btnx">Copiar resumo</span> e há também <span class="btnx">Copiar resumo dos filtrados</span> (totais de planilhas, empresas e registros das importações filtradas, sem listar uma por uma). Na etapa 5 (Relatório) e na etapa de exportação há o botão <span class="btnx">Copiar resumo para o canal</span>. Ele copia uma mensagem pronta (formato do Slack) com empresa, tipo, arquivo, os totais do relatório, o resultado da conferência, as linhas descartadas e o status do piloto no ERP. Basta colar no canal.</p></details>
+<details><summary>“Importação bloqueada: confira antes de seguir”</summary><p>Desde a v108 o painel não deixa baixar os lotes nem confirmar quando <b>algum total não bate</b> (rodapé da planilha, valor digitado ou soma da planilha) ou quando sobra <b>linha sem explicação</b>. Veja o motivo no quadro vermelho da etapa de exportação, marque “Conferi e entendo a diferença” e escreva a justificativa (ex.: “12 vendas canceladas no filtro”). A justificativa fica no relatório de importações. O piloto de 20 registros continua liberado.</p></details>
+<details><summary>Auditoria das linhas: o que o painel descartou?</summary><p>Na etapa 5 (Relatório), o quadro “Auditoria das linhas” mostra: linhas lidas = descartadas + usadas, e a lista de cada linha descartada com o número, o motivo (cabeçalho repetido, total/rodapé, título acima do cabeçalho, regra do tipo) e o conteúdo. Se a conta não fechar, o painel avisa e bloqueia. Confira a lista antes de importar: se uma linha de dado real aparecer ali, avise para ajustarmos a regra.</p></details>
+<details><summary>Conferência automática de totais (rodapé da planilha)</summary><p>Se o relatório do cliente traz uma linha de total no rodapé (ex.: “TOTAL DE VENDAS: 2.143.680,60”), o painel lê esse valor sozinho e compara com o que foi processado. Na etapa 5 aparece “Bateu com rodapé da planilha” ou “Não bateu” com a diferença. Você ainda pode digitar outro total na coluna “Digitado”, que tem prioridade.</p></details>
+<details><summary>Teste no ERP antes de importar (piloto)</summary><p>Na etapa de exportação, use <span class="btnx">Baixar piloto (20 registros)</span>: metade são os casos mais difíceis (ajustados ou com atenção). Importe numa loja de teste do ERP e marque “Importou sem erros” ou “Deu erro no ERP”. O resultado do piloto vai junto no registro da importação.</p></details>
+<details><summary>Deu erro no piloto: como abrir a tarefa no Linear</summary><p>Marque “Deu erro no ERP”, cole a mensagem do erro e clique em <span class="btnx">Copiar tarefa do Linear</span>. O texto já vem com empresa, tipo, arquivo, totais e versão do painel, e sugere o projeto <b>ERP Manutenção</b> (toda tarefa do Linear precisa de projeto; troque se houver um mais adequado). O painel não cria a tarefa sozinho: cole no Linear.</p></details>
+<details><summary>Buscar a planilha direto no Google Drive</summary><p>Na etapa 1, abaixo da área de upload, abra “Ou buscar a planilha no Google Drive”, digite parte do nome do arquivo ou da loja e clique em <b>Usar</b>. Funciona com xlsx, xls, csv, Google Sheets e PDF que estejam no seu Drive ou compartilhados com você. Só funciona abrindo o painel pelo link do artefato.</p></details>
+<details><summary>Baixar tudo em uma planilha só ou dividir em lotes</summary><p>Na etapa de exportação, em <b>Como baixar</b>, escolha entre <b>Dividir em lotes</b> (padrão, até 500 vendas/produtos/serviços/OS ou 1.000 clientes/fornecedores/financeiro por arquivo) e <b>Tudo em uma planilha só</b>. Arquivo único grande pode demorar ou ser recusado pelo ERP; nesse caso o painel avisa. Teste antes com o piloto. A escolha vale para o download, o envio ao Drive e o registro de lotes.</p></details>
+<details><summary>ERP: “Data truncated for column 'origem'” (em todos os itens de produtos)</summary><p>A coluna <b>Origem</b> do ERP é o código fiscal da mercadoria, de 0 a 8 (0 = Nacional). Quando a planilha do cliente trazia texto livre ali (Compra, Loja, Importado...), o ERP recusava todas as linhas. Desde a v115 o painel só envia o código: “Nacional” vira 0, e qualquer outro texto é apagado e a linha fica como atenção. Se o cliente quiser outra origem, informe o código 0 a 8 na planilha de origem.</p></details>
+<details><summary>Memória RAM preenchida sem ter o dado na planilha / “-” nas colunas</summary><p>O painel só preenche a <b>Memória RAM</b> quando a planilha tem uma coluna com “RAM” no nome (ou quando o nome do produto traz a RAM, como “M1 8/512GB”). Uma coluna chamada apenas <b>Memória</b> (256, 128…) é armazenamento e vai para <b>GB</b>. Além disso, células que trazem só “-”, “N/A”, “#N/A” ou “null” são tratadas como vazias em todos os modelos: o Serial Number, o Valor de atacado e demais campos ficam em branco em vez de “-” ou 0,00.</p></details>
+<details><summary>ERP: “Venda código X: Nenhum produto informado” e vendas juntas por nº repetido</summary><p>Dois problemas em relatórios de vendas, corrigidos na v121. (1) As linhas finais <b>TOTAIS / Linhas: / Quantidade:</b> do relatório eram lidas como vendas sem produto; agora são descartadas (aparecem na Auditoria das linhas) e os totais “Linhas” e “Quantidade” entram na conferência. (2) Em relatórios de várias lojas, o <b>Nº da venda se repete</b> entre lojas e entre tipos (Venda balcão, Ordem de serviço…). Quando isso acontece, o painel separa as vendas por <b>Nº + Loja + Tipo</b> (a combinação que deixa cada venda com um único cliente), gera novos códigos e avisa no Relatório de validação (“Aviso: nº da venda repetido”). Se você já importou uma planilha gerada antes da v121 desse tipo de relatório, refaça: ela tinha vendas de clientes diferentes juntas na mesma venda.</p></details>
+<details><summary>Quem é marcado no aviso do Slack ao confirmar a importação</summary><p>Quando a importação vem de um pedido da <b>Fila do CC</b>, o aviso “Importado com sucesso” marca com @ no Slack o operador que enviou as planilhas ao Customer Center (campo <b>Enviado ao CC por</b>). O painel procura o nome no Slack; se achar exatamente uma pessoa, a marcação notifica o operador. Se não encontrar, ou houver mais de uma pessoa com o mesmo nome, o aviso mostra apenas o nome em texto, sem marcar ninguém. Importações sem pedido do CC não marcam ninguém.</p></details>
+<details><summary>Custos fixos: planilha só com o dia do vencimento</summary><p>Quando o arquivo financeiro traz apenas a coluna <b>Dia</b> (ex.: custos fixos mensais), o painel monta o <b>vencimento</b> com esse dia e o mês de referência. Por padrão é o mês atual; para outro mês, preencha <b>Mês de referência (MM/AAAA)</b> em Preparar dados › Regras da empresa. O tipo da movimentação é deduzido como <b>despesa (2)</b> quando o nome do arquivo ou da aba tem “custos”, “contas a pagar” ou “despesas”, e como receita (1) quando tem “receber” ou “receitas”. A coluna <i>Tipo de Recorrência</i> (Mensal) não é usada como tipo. Os lançamentos ficam como ajustados e o total é conferido com o rodapé.</p></details>
+<details><summary>Como o painel confere com o rodapé da planilha (todos os modelos)</summary><p>Para qualquer tipo (clientes, fornecedores, produtos, serviços, vendas, OS e financeiro), o painel lê os totais impressos no rodapé da planilha, inclusive quando vêm todos em uma única célula (ex.: “Quantidade de Contas 1233 · Valor Original Total R$ 4.647.052,15”), e compara com o resultado na <b>Conferência de totais</b>. São reconhecidos nomes como Quantidade de clientes/produtos/contas/pedidos, Valor Original/Bruto e Total geral. Totais do rodapé que não têm campo equivalente no painel aparecem em uma linha de consulta abaixo da tabela. Se algo não bater, a exportação fica bloqueada até você justificar.</p></details>
+<details><summary>Contas a pagar/receber: total diferente do rodapé da planilha</summary><p>Em planilhas de contas, o painel usa a coluna <b>Valor Original</b> como Valor Total, para bater com o “Valor Original Total” e a “Quantidade de Contas” do rodapé (antes o painel somava o <i>Valor Baixado</i>, que desconsidera contas em aberto e juros/descontos). O <b>Nome da Despesa</b> vai para o Título e o valor efetivamente pago continua no campo Valor Pagamento. O rodapé é lido mesmo quando vem em uma única célula e entra na conferência de totais.</p></details>
+<details><summary>Contas a receber (boletos/Pix de gateway): “0 prontas para importar”</summary><p>Relatórios com colunas <b>Data da compensação</b>, <b>Valor de transação</b>, <b>Valor total a receber</b> e <b>Situação</b> (Aguardando/Compensado) agora são lidos assim: Data da compensação = <b>Data de Vencimento</b>; Valor de transação (bruto) = <b>Valor Total</b>, com Taxas na coluna de taxa; Data da transação = Data de Pagamento. Linhas <b>Compensado</b> entram como pagas (valor, data e forma Boleto/Pix); <b>Aguardando</b> ficam em aberto. O nome da pessoa é tirado da Descrição (o que vem depois do código, sem “Boleto 8/8” nem “(Venda expressa)”); “Não informado” fica sem pessoa. Se preferir o valor líquido, troque a coluna no mapeamento.</p></details>
+<details><summary>ERP: “Valor deve ser maior que zero” no Financeiro</summary><p>Lançamentos com <b>valor R$ 0,00</b> na planilha original (ex.: “Compra de nº 593” zerada) não são exportados, porque o ERP recusa a importação inteira por causa deles. Eles aparecem em <b>Antes e depois</b> como removidos, com o motivo. Se o lançamento precisa existir, corrija o valor na origem e envie de novo.</p></details>
+<details><summary>Produtos de PDF: nomes com “Empresa … Período” e erro “Duplicate entry … PRIMARY” no ERP</summary><p>Em listagens de produtos em PDF, o painel remove o cabeçalho que se repete a cada página (nome da empresa, endereço, “Listagem de Produtos Resumido”, período) do nome do produto, não usa o telefone do cabeçalho como código de barras e ignora o rodapé “QTD PRODUTOS”. Códigos de barras repetidos em vários produtos são limpos. Se o ERP ainda responder “Duplicate entry … for key PRIMARY”, uma importação anterior da mesma loja provavelmente já gravou parte dos produtos: confira no ERP o que já foi cadastrado antes de importar de novo, e importe em arquivos de até 500 linhas (o painel já divide assim; não junte os lotes).</p></details>
+<details><summary>Estoque de bike, patinete ou moto elétrica (chassi e motor)</summary><p>Planilhas com as colunas <b>Chassi</b> e <b>Motor</b> (ex.: controle de entrada de e-bikes) são lidas como <b>Produtos / Estoque</b>. O <b>Chassi</b> vai para o campo <b>IMEI</b> (mantendo letras e números) e o <b>Motor</b> para o <b>Serial Number</b>. A categoria sai como <b>Bike/Patinete</b> e a classe como Aparelho (0); o Tipo continua “Celular”, pois o ERP só aceita Celular, Acessório, Peça e Serviço. Na aba do tipo, em <b>Preparar dados › Classes de produto no arquivo</b>, a caixa <b>Bike/Patinete</b> permite tirar essas linhas da exportação (elas ficam em “Filtrados”). Recomenda-se importar primeiro o piloto de 20 registros.</p></details>
+<details><summary>Quero escolher em quantas planilhas dividir</summary><p>Na aba <b>Exportar</b>, em “Como baixar”, escolha <b>Dividir em __ planilhas</b> e digite o número. O painel reparte os registros em arquivos de tamanho igual (ex.: 5.772 produtos em 3 planilhas = 1.924 por arquivo) e mostra quantos ficam em cada um. Se o tamanho passar do recomendado para o tipo (500 na maioria), aparece um aviso, pois o ERP pode recusar arquivos grandes. Cada planilha continua pedindo a sua confirmação de download.</p></details>
+<details><summary>Relatório de clientes com os títulos repetidos em todas as linhas</summary><p>Alguns sistemas exportam cada linha como “CÓD., NOME/RAZÃO, CPF/CNPJ, … , 5691, ABEL MARTINS, 148.203…, QTD CLIENTES:, 6171”. O painel detecta esse padrão, usa os rótulos como cabeçalho, descarta as colunas finais repetidas e usa o “QTD CLIENTES” como total para conferir com a quantidade importada. Telefones só com máscara vazia “(  )    -” ficam em branco; se a coluna TELEFONE estiver vazia ou inválida, o painel usa a coluna CELULAR. Documentos como 000.000.000-00 ou 111.111.111-11 continuam como vieram: vale revisar com o cliente.</p></details>
+<details><summary>O que são os gráficos do Relatório (Painel de métricas)</summary><p>Na aba <b>Relatório</b>, abaixo dos totais, o <b>Painel de métricas</b> resume a conversão: <b>Qualidade</b> (% de registros prontos, sem pontos de atenção), <b>Composição</b> (sem alteração, ajustados e com atenção), <b>Campos mais ajustados</b>, <b>Principais pontos de atenção</b> e <b>Preenchimento por campo</b>. Conforme o tipo, aparecem também: receitas x despesas por vencimento e pagos x em aberto (Financeiro); faturamento por mês e formas de pagamento (Vendas); produtos por tipo e maiores valores em venda (Estoque). Passe o mouse nas barras e fatias para ver o valor exato. Os gráficos só leem o que já está no painel: não mudam nenhum dado.</p></details>
+<details><summary>Passou de 500 vendas (ou do limite do tipo)</summary><p>O painel divide em lotes menores (vendas, produtos, serviços e OS: 500 por arquivo; clientes, fornecedores e financeiro: 1.000). Importe um de cada vez, na ordem.</p></details>
+</section>
+
+<section id="versoes">
+<h2>12. Histórico do manual</h2>
+<p>Este manual é atualizado sempre que o painel muda. Última coluna indica o que mudou na documentação.</p>
+<div class="tbl"><table>
+<tr><th>Painel</th><th>Data</th><th>Mudança no painel</th></tr>
+<tr><td>v134</td><td>09/11/2026</td><td>Histórico: o seletor "Período" agora atualiza todo o dashboard (indicadores, gráficos, tabelas, comparativo e sistemas) para a semana ou mês escolhido, e o slide exportado usa o mesmo período.</td></tr>
+<tr><td>v133</td><td>09/11/2026</td><td>Exportar apresentação: novo seletor "Período do slide" para escolher a semana (últimas 12) ou o mês (últimos 6) que vai no slide.</td></tr>
+<tr><td>v132</td><td>09/11/2026</td><td>Exportar apresentação (PPTX) agora gera um slide só: resumo do mês (6 indicadores), planilhas mais importadas e sistemas que mais importamos, com pendências.</td></tr>
+<tr><td>v131</td><td>06/11/2026</td><td>Conversor: "Baixar todas as planilhas (.zip)" mais robusto: mostra avisos de erro, usa .xlsx se uma tabela não couber no .xls e deixa o botão "Salvar o .zip pronto" caso o aviso de salvar do visualizador não abra.</td></tr>
+<tr><td>v130</td><td>06/11/2026</td><td>Conversor: escolha do formato de saída (.xls Excel 97-2003 por padrão, .xlsx ou .csv) para todos os downloads; novo “Baixar todas as planilhas (.zip)” e “Baixar todas, uma por vez”; a conversão por tipo e modelo também respeita o formato escolhido (o ERP recomenda .xlsx; .xls acima de 65.536 linhas cai para .xlsx)</td></tr>
+<tr><td>v129</td><td>06/11/2026</td><td>Novo Conversor (menu Importação → Conversor): aceita planilhas, binários/legados (.dbf, .dat, .bin, sem extensão), HTML, PDF com texto, PDF escaneado e imagens (OCR por IA), ZIP; mostra cada tabela encontrada com prévia e o tipo detectado (editável); baixa a versão convertida (.xlsx/.csv), tudo em um .zip, ou separado por tipo e modelo de importação do MercadoPhone (uma pasta por tipo), com resumo de registros, ajustados e atenção</td></tr>
+<tr><td>v128</td><td>06/11/2026</td><td>Visual renovado: fundo com degradê, botões e cartões com brilho e animações suaves (respeitam “reduzir movimento”); contadores animados nos totais; novo Painel de métricas no Relatório com gráficos (qualidade da conversão, composição dos registros, campos mais ajustados, pontos de atenção, preenchimento por campo e, por tipo: receitas x despesas e situação no Financeiro, faturamento por mês e formas de pagamento nas Vendas, produtos por tipo e maiores valores no Estoque)</td></tr>
+<tr><td>v127</td><td>05/11/2026</td><td>Clientes (relatório que repete os rótulos das colunas em TODAS as linhas, ex.: “CÓD., NOME/RAZÃO, CPF/CNPJ…” antes de cada cliente): o painel agora reconhece o padrão, usa os rótulos como cabeçalho, lê os dados certos e usa “QTD CLIENTES: 6171” como total de conferência; telefone “(  )    -” fica em branco e, se TELEFONE estiver vazio ou inválido, usa a coluna CELULAR</td></tr>
+<tr><td>v126</td><td>05/11/2026</td><td>Exportar: nova opção “Dividir em __ planilhas” — você escolhe em quantas planilhas iguais quer dividir os registros (além do padrão em lotes e de “tudo em uma só”); aparece o tamanho de cada arquivo e um aviso se passar do recomendado</td></tr>
+<tr><td>v125</td><td>05/11/2026</td><td>Produtos vindos de PDF: cabeçalho de página (“Empresa … Listagem de Produtos … Período …”) deixa de ser colado no nome do produto; telefone do cabeçalho repetido não vira mais código de barras (EAN repetido em vários produtos é limpo); linha de rodapé “QTD PRODUTOS” não é mais importada como produto</td></tr>
+<tr><td>v124</td><td>05/11/2026</td><td>Financeiro: lançamentos com valor R$ 0,00 (ex.: compras zeradas) deixam de ser exportados, pois o ERP recusa com “Valor deve ser maior que zero”; aparecem em Antes e depois como removidos com o motivo</td></tr>
+<tr><td>v123</td><td>05/11/2026</td><td>Financeiro (Contas a Receber de gateway/boletos): “Data da compensação” passa a ser lida como Data de Vencimento quando não há outra coluna de vencimento (antes as 28 linhas eram descartadas por falta de data); “Valor de transação” (bruto) vira Valor Total, “Data da transação” vira Data de Pagamento; nome da pessoa é extraído da Descrição (“ID | NOME | Boleto 8/8”, “(Venda expressa)”; “Não informado” fica em branco); Compensado entra como pago com forma Boleto/Pix</td></tr>
+<tr><td>v122</td><td>05/11/2026</td><td>Produtos: coluna “Memória” (armazenamento) deixa de ser lida como Memória RAM e vai para GB (RAM só quando o cabeçalho tem “RAM”); células só com “-”, N/A ou null passam a ser vazias em todos os modelos (Serial, Valor de atacado etc. saíam “-”/0,00)</td></tr>
+<tr><td>v121</td><td>05/11/2026</td><td>Vendas: nº da venda repetido entre lojas/tipos (Venda x Ordem de serviço, Loja 1 a 4) agora separa as vendas por Nº + Loja + Tipo (antes juntava vendas diferentes); linhas TOTAIS/Linhas/Quantidade do rodapé não viram mais vendas (erro “Nenhum produto informado”); conferência de linhas de itens e de quantidade pelo rodapé</td></tr>
+<tr><td>v120</td><td>05/11/2026</td><td>Ao confirmar a importação, o aviso no Slack marca (@) o operador que enviou as planilhas ao CC; se o nome não for encontrado com certeza no Slack, aparece só o nome</td></tr>
+<tr><td>v119</td><td>05/11/2026</td><td>Financeiro: planilha de custos fixos (só o dia do vencimento) agora gera vencimento com o mês de referência; “Custos/Contas a pagar” no nome do arquivo ou da aba define despesa; coluna Tipo de Recorrência deixa de ser lida como tipo; rodapé sem quebra de linha também é lido</td></tr>
+<tr><td>v118</td><td>05/11/2026</td><td>Conferência em todos os modelos: rodapé em célula única lido em qualquer tipo, mais nomes de total reconhecidos (contas, títulos, pedidos, valor original/bruto) e lista dos totais do rodapé sem campo equivalente</td></tr>
+<tr><td>v117</td><td>05/11/2026</td><td>Financeiro: valor total passa a ser o Valor Original (igual ao rodapé da planilha de contas), o Nome da Despesa vira Título, e o rodapé em célula única (Quantidade de Contas, Valor Original Total) entra na conferência</td></tr>
+<tr><td>v116</td><td>31/10/2026</td><td>Bike/Patinete: nova classe no filtro de produtos; planilhas com chassi/motor são lidas como Produtos (chassi no IMEI, motor no Serial, chassi mantém letras), categoria Bike/Patinete; coluna de quantidade com texto (ex.: status do estoque) deixa de ser usada como quantidade</td></tr>
+<tr><td>v115</td><td>31/10/2026</td><td>Produtos: coluna Origem só sai com código fiscal 0 a 8 (texto livre dava “Data truncated for column 'origem'” em todos os itens); banco de erros e34</td></tr>
+<tr><td>v114</td><td>30/10/2026</td><td>Exportar: opção de baixar tudo em uma planilha só ou dividir em lotes (padrão: lotes, com aviso quando um arquivo único passa do limite)</td></tr>
+<tr><td>v113</td><td>30/10/2026</td><td>“Copiar resumo dos filtrados” traz só os totais (planilhas, empresas, registros e planilhas por tipo), sem listar uma por uma</td></tr>
+<tr><td>v112</td><td>30/10/2026</td><td>Relatório de importações: botão “Copiar resumo” em cada importação e “Copiar resumo dos filtrados”; o resumo fica guardado no registro</td></tr>
+<tr><td>v111</td><td>30/10/2026</td><td>Botão “Copiar resumo para o canal” (Relatório e Exportar): mensagem pronta com empresa, totais, conferência, linhas descartadas e resultado do piloto</td></tr>
+<tr><td>v110</td><td>30/10/2026</td><td>CSV/TXT lido como texto (corrige valores 100x/1.000x errados em números brasileiros); desconto de pedido repetido por linha é aplicado uma vez; clientes distintos conta Consumidor final; banco de erros e33</td></tr>
+<tr><td>v109</td><td>30/10/2026</td><td>Cartões de total (valor em custo/venda etc.): valores grandes não quebram mais em duas linhas</td></tr>
+<tr><td>v108</td><td>30/10/2026</td><td>Auditoria das linhas: lista toda linha descartada na leitura (com número e motivo), fecha a conta linhas lidas = usadas + descartadas, e bloqueia download/confirmação quando algum total não bate ou há linha sem explicação (liberação exige justificativa, registrada no relatório)</td></tr>
+<tr><td>v107</td><td>30/10/2026</td><td>Conferência automática: lê o total do rodapé da planilha (ex.: TOTAL DE VENDAS) e compara com o painel; piloto de 20 registros para testar no ERP antes de importar o resto; tarefa pronta para o Linear (projeto ERP Manutenção); busca de planilha no Google Drive; manual sincronizado por CHANGELOG (sync_manual.py)</td></tr>
+<tr><td>v106</td><td>30/10/2026</td><td>Lotes menores para grandes quantidades: 500 por arquivo (vendas, produtos, serviços, OS) e 1.000 (clientes, fornecedores, financeiro)</td></tr>
+<tr><td>v105</td><td>30/10/2026</td><td>Vendas: “Histórico de vendas – detalhado” (um bloco por venda) é convertido em tabela de vendas, itens e pagamentos; troco descontado, acréscimo somado ao 1º item; banco de erros e32</td></tr>
+<tr><td>v104</td><td>30/10/2026</td><td>Vendas: venda sem data recebe a data da anterior (erro “data_venda cannot be null”); quantidade de item só inteira até 1.000 (evita “Qtd. produtos vendidos” absurda); banco de erros e31</td></tr>
+<tr><td>v103</td><td>30/10/2026</td><td>Planilhas convertidas de PDF com cabeçalho mesclado (estoque/pessoas): colunas agrupadas pelo cabeçalho, corrigindo custo e venda zerados</td></tr>
+<tr><td>v102</td><td>30/10/2026</td><td>Relatórios convertidos de PDF (ex.: Relatório de Pessoas): colunas repetidas são juntas, cabeçalho de página e rodapés removidos, CÓDIGO não vira CEP, “pessoas” detectado como Clientes</td></tr>
+<tr><td>v101</td><td>30/10/2026</td><td>Financeiro: cabeçalhos de página (“Relatório emitido em…”, “SITUAÇÃO…”), totais de rodapé e linhas sem data e sem pessoa são descartados</td></tr>
+<tr><td>v100</td><td>30/10/2026</td><td>Financeiro: linhas de total/rodapé (sem título e sem valor ou data) são descartadas; vencimento vazio usa a competência; banco de erros e28</td></tr>
+<tr><td>v99</td><td>30/10/2026</td><td>Financeiro: valor total vazio usa o valor pago; linhas sem nenhum valor são listadas como erro (e27)</td></tr>
+<tr><td>v98</td><td>30/10/2026</td><td>Financeiro: linha sem título recebe título automático (categoria, observações ou “Lançamento - pessoa”); banco de erros e26</td></tr>
+<tr><td>v97</td><td>30/10/2026</td><td>Financeiro: pagamento só com forma, só com valor ou só com data não gera mais “Valor do pagamento deve ser maior que zero” / “Data do pagamento é obrigatória”; banco de erros e25</td></tr>
+<tr><td>v96</td><td>30/10/2026</td><td>Produtos: quantidade acima de 1.000.000 é tratada como coluna errada (usa 1 e marca atenção), evitando estoque absurdo no relatório</td></tr>
+<tr><td>v95</td><td>30/10/2026</td><td>Relatório .xls em HTML (Vendas Realizadas): valores 399,00 não viram mais 39900, várias formas de pagamento na mesma célula são separadas (corrige “Data too long for column descricao”)</td></tr>
+<tr><td>v94</td><td>30/10/2026</td><td>Descrições acima de 255 caracteres são cortadas (erro “Data too long for column descricao”); verificação e23</td></tr>
+<tr><td>v93</td><td>30/10/2026</td><td>Trava de valores impossíveis em vendas (quantidade e valor fora do possível viram atenção)</td></tr>
+<tr><td>v92</td><td>30/10/2026</td><td>Vendas sem produto no relatório: cria item genérico com o valor dos pagamentos; verificação e22</td></tr>
+<tr><td>v91</td><td>30/10/2026</td><td>Vendas: valor e parcelas escritos no nome da forma de pagamento são separados; verificação e21</td></tr>
+<tr><td>v90</td><td>30/10/2026</td><td>PDF de OS de várias páginas: não perde mais o último registro de cada página e não cria coluna falsa no cabeçalho (2.172 de 2.172 OS no PDF testado)</td></tr>
+<tr><td>v89</td><td>30/10/2026</td><td>Código de OS/venda acima do limite do ERP é reduzido automaticamente; nova verificação no banco de erros (e20)</td></tr>
+<tr><td>v88</td><td>30/10/2026</td><td>PDF de várias páginas: ignora cabeçalho repetido e topo/rodapé do navegador; corrige colunas coladas</td></tr>
+<tr><td>v87</td><td>30/10/2026</td><td>Leitura de PDF de relatório de OS (células multilinha, código com #, “Criado em”)</td></tr>
+<tr><td>v86</td><td>30/10/2026</td><td>Nova aba Processos (guia rápido dentro do painel)</td></tr>
+<tr><td>v85</td><td>30/10/2026</td><td>Conferência automática com o banco de erros na etapa Exportar; manual criado</td></tr>
+<tr><td>v84</td><td>—</td><td>Banco de erros (aba Gestão)</td></tr>
+<tr><td>v83</td><td>—</td><td>Etapas do Customer Center automáticas</td></tr>
+<tr><td>v82</td><td>—</td><td>Recibo com todas as planilhas da loja e seleção</td></tr>
+<tr><td>v81</td><td>—</td><td>Financeiro: tipo de movimentação obrigatório</td></tr>
+</table></div>
+</section>
+
+<footer>Organizador Mercadophone · Documentação interna da equipe de migração. Os prints usam dados de exemplo.</footer>
+</main>
+</div>
