@@ -482,9 +482,9 @@ tbody tr:hover{background:color-mix(in srgb,var(--c1) 7%,transparent)}
 .ring{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
 .ring svg{width:92px;height:92px}
 .ring .rv{font:700 18px var(--f-display);fill:var(--ink)}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:color-mix(in srgb,var(--c1) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--c1) 22%,var(--line));font-size:12.5px;animation:pop .5s var(--ease) both}
-.chip b{font-variant-numeric:tabular-nums}
+.ins-c .chips{display:flex;flex-wrap:wrap;gap:8px}
+.ins-c .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:color-mix(in srgb,var(--c1) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--c1) 22%,var(--line));font-size:12.5px;animation:pop .5s var(--ease) both}
+.ins-c .chip b{font-variant-numeric:tabular-nums}
 .an-c{transition:transform .25s var(--ease),box-shadow .3s}
 .an-c:hover{transform:translateY(-2px);box-shadow:var(--sh-h)}
 .tt{position:fixed;z-index:50;pointer-events:none;background:var(--ink);color:var(--bg);padding:6px 10px;border-radius:8px;font-size:12px;box-shadow:0 8px 24px -8px rgba(0,0,0,.4);opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;max-width:240px}
@@ -2593,7 +2593,7 @@ function errFromErp(er){let n=0;const KL={longo:'texto longo demais',inteiro:'pr
   if(n){errSave().then(()=>renderErr())}return n}
 
 const MANUAL_URL='https://claude.ai/artifact/9rCM85SPDDDJFyJRrBFEE9';
-const PROC_VER='v136 · 12/11/2026';
+const PROC_VER='v137 · 12/11/2026';
 const PROC=[
  ['Visão geral do fluxo',`<p>O painel recebe a planilha do cliente, reconhece o tipo, ajusta para o padrão dos modelos do MercadoPhone e mostra o que mudou. O processamento acontece no seu navegador; nada vai ao ERP sozinho.</p><p><b>Arquivo → Tipo e colunas → Verificação → Antes e depois → Relatório → Exportar e registrar.</b></p>`],
  ['1. Arquivo',`<ol><li>Preencha <b>Empresa</b>, <b>ID da loja (Unit ID)</b>, <b>Responsável</b> e <b>Sistema de origem</b>. Se a loja veio da Fila do CC, já vêm preenchidos.</li><li>Suba a planilha (.xlsx, .xls, .csv, .pdf com texto, .ods, .dbf, .dat ou .zip). No .zip o painel lista todas as planilhas antes de processar.</li><li>Em <b>Preparar dados</b>, escolha o que fazer com repetidas, canceladas e faixa de datas, e as regras da empresa (forma de pagamento e vendedor padrão). <b>Salvar perfil desta empresa</b> reaproveita nas próximas.</li></ol>`],
