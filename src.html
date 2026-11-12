@@ -539,6 +539,7 @@ tbody tr:hover{background:color-mix(in srgb,var(--c1) 7%,transparent)}
 .jv-bars i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:var(--accent-soft);z-index:0}.jv-bars span,.jv-bars b{position:relative;z-index:1}.jv-bars span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .jv-ba{display:flex;flex-direction:column;gap:8px}.jv-bx{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;display:flex;flex-direction:column;gap:4px;min-width:0}
 .jv-bx small{opacity:.75}.jv-bx>div{display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-width:0}.jv-bx s{color:var(--bad);word-break:break-word}.jv-bx b{color:var(--ok);word-break:break-word}
+.jv-ln{gap:8px}.jv-ln>b{font-size:14px}.jv-ln>span{font-size:13px}
 .jv-det>summary{cursor:pointer;font-weight:600;padding:8px 0}
 .jv-sc{display:flex;flex-direction:column;align-items:center;gap:18px;padding:30px 0}
 .jv-sorb{width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e8f4ff 0,#7fd0ff 18%,#2d8cff 48%,#0b3fb8 82%);box-shadow:0 0 30px 6px rgba(61,160,255,.6),0 0 80px 16px rgba(45,110,255,.3);animation:jvBreath 1s ease-in-out infinite}
@@ -624,6 +625,7 @@ tbody tr:hover{background:color-mix(in srgb,var(--c1) 7%,transparent)}
   <div id="jvScan" class="jv-scan" hidden></div>
   <div id="jvRes" hidden>
    <div id="jvHero"></div>
+   <div id="jvLearn"></div>
    <section class="sec" id="secRep" aria-labelledby="s5"></section>
    <div id="jvDiff"></div>
    <section class="sec" id="secConf" aria-labelledby="sc"></section>
@@ -837,7 +839,7 @@ function loadSources(list,isSample,append){
   S.sample=!!isSample;S.fileName=S.srcs.length>1?S.srcs[0].name+' + '+(S.srcs.length-1)+' arquivo(s)':S.srcs[0].name;
   S.srcTotals=S.srcs.flatMap(p=>p.foot||[]);S.disc=S.srcs.flatMap(p=>(p.disc||[]).map(d=>Object.assign({src:p.name},d)));S.raw0=S.srcs.reduce((a,p)=>a+(p.raw0||p.rows.length),0);S.gate=null;S.pilot=null;S.userMap=false;S.regId=null;S.drive=null;S.dlCount=0;S.driveLog=[];
   rebuildData();S.scores=MODEL_ORDER.map(k=>({k,s:typeScore(k)})).sort((a,b)=>b.s-a.s);S.type=detectType();if(S.ccHint&&S.scores.some(x=>x.k===S.ccHint)){S.type=S.ccHint}S.ccHint=null;
-  autoMapAll();run();if(!isSample){try{jvOpen();jvScanRun()}catch(e){}}}
+  S.learned=null;autoMapAll();try{applyLearned()}catch(e){}run();if(!isSample){try{jvOpen();jvScanRun()}catch(e){}}}
 const loadAoa=(aoa,name,isSample)=>loadSources([{name,aoa}],isSample,false);
 const keyOf=(v,extract)=>{let s=typeof v==='number'?String(Math.round(v)):String(v??'');if(extract){const m=s.match(/\d{3,}/);s=m?m[0]:s}return norm(s).replace(/^0+(?=\d)/,'')};
 function rebuildData(){
@@ -2002,6 +2004,20 @@ function applyMapa(){const sis=getSis();if(!sis||!S.headers.length)return;const 
     Object.keys(S.map).forEach(k=>{if(S.map[k]===hi){S.map[k]=-1;S.msim[k]=0}});S.map[f.key]=hi;S.msim[f.key]=.99;n++});
   if(n)S.mapSis=sis}
 function saveMapa(){const sis=getSis();if(!sis||!S.headers.length||S.sample)return;const m={};TYPES[S.type].fields.forEach(f=>{const hi=S.map[f.key];if(hi>=0&&S.headers[hi])m[f.key]=norm(S.headers[hi])});MAPS[mapKey()]=m;try{localStorage.setItem('mp_maps',JSON.stringify(MAPS))}catch(e){}}
+/* correções lembradas por sistema de origem + tipo */
+let CORR={};try{CORR=JSON.parse(localStorage.getItem('mp_corr')||'{}')}catch(e){}
+const corrSave=()=>{try{localStorage.setItem('mp_corr',JSON.stringify(CORR))}catch(e){}};
+const corrKey=()=>norm(getSis())+'|'+S.type;
+function corrCell(ci,old,nw){const sis=getSis();if(!sis||S.sample||!(ci>=0))return null;const o=String(old==null?'':old).trim(),n=String(nw==null?'':nw).trim();if(!o||o===n||o.length>80||n.length>80)return null;
+  const k=corrKey(),L=CORR[k]=CORR[k]||{rules:{},rep:[]};const c=norm(S.headers[ci]),de=norm(o);let e=L.rep.find(x=>x.c===c&&x.de===de);const prev=e?e.p:null;if(e)e.p=n;else{if(L.rep.length>=300)L.rep.shift();e={c,de,p:n,o};L.rep.push(e)}corrSave();return {k,c,de,prev}}
+function corrRule(regra,val){const sis=getSis();if(!sis||S.sample)return null;const k=corrKey(),L=CORR[k]=CORR[k]||{rules:{},rep:[]};const prev=L.rules[regra];L.rules[regra]=val;corrSave();return {k,regra,prev}}
+function corrUndo(u){if(!u)return;const L=CORR[u.k];if(!L)return;if(u.regra){if(u.prev===undefined)delete L.rules[u.regra];else L.rules[u.regra]=u.prev}else{const i=L.rep.findIndex(x=>x.c===u.c&&x.de===u.de);if(i>=0){if(u.prev==null)L.rep.splice(i,1);else L.rep[i].p=u.prev}}corrSave()}
+function applyLearned(){const sis=getSis();if(!sis||!S.headers.length||S.sample)return;const L=CORR[corrKey()];if(!L)return;let nc=0,nr=0;
+  Object.keys(L.rules||{}).forEach(k=>{if(k in DEF_RULES()&&S.rules[k]!==L.rules[k]){S.rules[k]=L.rules[k];nr++}});
+  const cols=new Map();(L.rep||[]).forEach(x=>{const ci=S.headers.findIndex(h=>norm(h)===x.c);if(ci<0)return;(cols.get(ci)||cols.set(ci,new Map()).get(ci)).set(x.de,x.p)});
+  cols.forEach((m,ci)=>{S.rows.forEach(r=>{const v=r[ci];if(v==null||v==='')return;const p=m.get(norm(String(v)));if(p!==undefined&&String(v)!==p){r[ci]=p;nc++}})});
+  if(nc||nr){const p=S.learned&&S.learned.sis===sis?S.learned:{sis,cells:0,rules:0};S.learned={sis,cells:p.cells+nc,rules:p.rules+nr}}}
+function corrForget(){const k=corrKey();delete CORR[k];corrSave();S.learned=null}
 function fillSisList(){const dl=$('#sisList');if(!dl)return;const set=new Set(['Vhsys','Fone Ninja','Bling','Tiny','Omie','Conta Azul','Gestão Click','SmartPhone ERP','Planilha própria']);HIST.forEach(h=>{if(h.sistema)set.add(h.sistema)});(S.cc||[]).forEach(x=>{if(x.sourceSystem)set.add(x.sourceSystem)});dl.innerHTML=[...set].map(v=>`<option value="${esc(v)}">`).join('')}
 try{const e=localStorage.getItem('mp_empresa');if(e)$('#empresa').value=e}catch(e){}
 $('#empresa').addEventListener('change',()=>{loadProfile()});
@@ -2666,7 +2682,7 @@ function errFromErp(er){let n=0;const KL={longo:'texto longo demais',inteiro:'pr
   if(n){errSave().then(()=>renderErr())}return n}
 
 const MANUAL_URL='https://claude.ai/artifact/9rCM85SPDDDJFyJRrBFEE9';
-const PROC_VER='v138 · 12/11/2026';
+const PROC_VER='v139 · 12/11/2026';
 const PROC=[
  ['Visão geral do fluxo',`<p>O painel recebe a planilha do cliente, reconhece o tipo, ajusta para o padrão dos modelos do MercadoPhone e mostra o que mudou. O processamento acontece no seu navegador; nada vai ao ERP sozinho.</p><p><b>Arquivo → Tipo e colunas → Antes e depois → Exportar e registrar.</b> O <b>Jarvis</b> (a bola flutuante no canto da tela) analisa a planilha assim que ela é carregada e reúne verificação, relatório e conferência de valores.</p>`],
  ['1. Arquivo',`<ol><li>Preencha <b>Empresa</b>, <b>ID da loja (Unit ID)</b>, <b>Responsável</b> e <b>Sistema de origem</b>. Se a loja veio da Fila do CC, já vêm preenchidos.</li><li>Suba a planilha (.xlsx, .xls, .csv, .pdf com texto, .ods, .dbf, .dat ou .zip). No .zip o painel lista todas as planilhas antes de processar.</li><li>Em <b>Preparar dados</b>, escolha o que fazer com repetidas, canceladas e faixa de datas, e as regras da empresa (forma de pagamento e vendedor padrão). <b>Salvar perfil desta empresa</b> reaproveita nas próximas.</li></ol>`],
@@ -2770,18 +2786,18 @@ function iaState(){const T=TYPES[S.type]||{fields:[]};const R=S.recs||[];const c
   let rep={};try{rep=report.last||{}}catch(e){}
   return {arquivo:S.fileName,tipo:S.type,linhas_originais:S.rows.length,registros_prontos:R.length,situacao:c,colunas:S.headers,mapeamento:map,regras:S.rules,preparo:S.prep,avisos:[...by.values()].sort((a,b)=>b.qtd-a.qtd).slice(0,15),extra:S.extra||{}}}
 const iaTrim=(v)=>{v=v==null?'':String(v);return v.length>80?v.slice(0,80)+'…':v};
-function iaSnapshotStart(){IA.cur={cells:[],map:null,rules:null,prep:null,desc:[]}}
+function iaSnapshotStart(){IA.cur={cells:[],map:null,rules:null,prep:null,desc:[],learn:[]}}
 function iaChanged(){try{run(true)}catch(e){}}
 const IA_TOOLS=()=>[
  {name:'get_state',description:'Resumo da planilha: tipo, colunas, mapeamento de colunas (campo do ERP -> coluna do cliente), regras, contagem de registros por situação e os avisos mais frequentes com números de linha de exemplo. Chame no começo e depois de cada ajuste.',execute:()=>iaState()},
  {name:'get_rows',description:'Devolve linhas da planilha ORIGINAL (cópia de trabalho) com número da linha (1 = primeira linha de dados). Máx. 40 por chamada.',inputSchema:{type:'object',properties:{from:{type:'number',description:'primeira linha (1-based)'},count:{type:'number'}},required:['from']},execute:(a)=>{const f=Math.max(1,Math.floor(+a.from||1)),n=Math.min(40,Math.max(1,Math.floor(+a.count||15)));return {colunas:S.headers,linhas:S.rows.slice(f-1,f-1+n).map((r,i)=>({linha:f+i,v:r.map(iaTrim)}))}}},
  {name:'find_rows',description:'Procura linhas da planilha original cujo texto (em uma coluna ou em qualquer uma) contém o termo. Máx. 25 resultados.',inputSchema:{type:'object',properties:{texto:{type:'string'},coluna:{type:'string',description:'opcional: nome da coluna'}},required:['texto']},execute:(a)=>{const q=norm(String(a.texto||''));const ci=a.coluna?iaCol(a.coluna):-1;const out=[];for(let i=0;i<S.rows.length&&out.length<25;i++){const r=S.rows[i];const hit=ci>=0?norm(r[ci]).includes(q):r.some(x=>norm(x).includes(q));if(hit)out.push({linha:i+1,v:r.map(iaTrim)})}return {colunas:S.headers,achadas:out}}},
  {name:'get_output',description:'Devolve registros JÁ PROCESSADOS (como serão exportados) com avisos. Para Vendas cada item é um registro da aba Produtos. Máx. 30 por chamada; use apenas_com_aviso para ver só os problemáticos.',inputSchema:{type:'object',properties:{from:{type:'number'},count:{type:'number'},apenas_com_aviso:{type:'boolean'}}},execute:(a)=>{let R=S.recs||[];if(a.apenas_com_aviso)R=R.filter(r=>r.att.length||r.iss.length);const f=Math.max(0,Math.floor(+a.from||0)),n=Math.min(30,Math.max(1,Math.floor(+a.count||10)));return {total:R.length,registros:R.slice(f,f+n).map(r=>({i:r.i,out:Object.fromEntries(Object.entries(r.out).filter(([k,v])=>v!==''&&v!=null).map(([k,v])=>[k,iaTrim(v)])),aviso:r.att.concat(r.iss)}))}}},
- {name:'set_cells',description:'Altera células da planilha original (cópia de trabalho). Cada edição: linha (1-based), coluna (nome exato do cabeçalho) e valor novo. Máx. 200 edições por chamada. O painel recalcula tudo depois.',inputSchema:{type:'object',properties:{edicoes:{type:'array',items:{type:'object',properties:{linha:{type:'number'},coluna:{type:'string'},valor:{}},required:['linha','coluna','valor']}}},required:['edicoes']},execute:(a)=>{const L=Array.isArray(a.edicoes)?a.edicoes.slice(0,200):[];let n=0;const err=[];L.forEach(e=>{const ri=Math.floor(+e.linha)-1,ci=iaCol(e.coluna);if(!(ri>=0&&ri<S.rows.length)){err.push('linha '+e.linha+' não existe');return}if(!(ci>=0)){err.push('coluna "'+e.coluna+'" não existe');return}const old=S.rows[ri][ci];S.rows[ri][ci]=e.valor;IA.cur.cells.push([ri,ci,old]);n++});if(n)IA.cur.desc.push(n+' célula(s) alterada(s)');iaChanged();return {alteradas:n,erros:err}}},
+ {name:'set_cells',description:'Altera células da planilha original (cópia de trabalho). Cada edição: linha (1-based), coluna (nome exato do cabeçalho) e valor novo. Máx. 200 edições por chamada. O painel recalcula tudo depois.',inputSchema:{type:'object',properties:{edicoes:{type:'array',items:{type:'object',properties:{linha:{type:'number'},coluna:{type:'string'},valor:{}},required:['linha','coluna','valor']}}},required:['edicoes']},execute:(a)=>{const L=Array.isArray(a.edicoes)?a.edicoes.slice(0,200):[];let n=0;const err=[];L.forEach(e=>{const ri=Math.floor(+e.linha)-1,ci=iaCol(e.coluna);if(!(ri>=0&&ri<S.rows.length)){err.push('linha '+e.linha+' não existe');return}if(!(ci>=0)){err.push('coluna "'+e.coluna+'" não existe');return}const old=S.rows[ri][ci];S.rows[ri][ci]=e.valor;IA.cur.cells.push([ri,ci,old]);try{const l=corrCell(ci,old,e.valor);if(l)IA.cur.learn.push(l)}catch(_){}n++});if(n)IA.cur.desc.push(n+' célula(s) alterada(s)');iaChanged();return {alteradas:n,erros:err}}},
  {name:'set_mapping',description:'Muda qual coluna do cliente alimenta um campo do ERP. campo = chave do campo (veja mapeamento em get_state, ex. "p_vu"); coluna = nome do cabeçalho ou null para desligar o campo.',inputSchema:{type:'object',properties:{campo:{type:'string'},coluna:{type:['string','null']}},required:['campo']},execute:(a)=>{const k=iaKey(a.campo);if(!k)throw new Error('campo "'+a.campo+'" não existe neste tipo');if(!IA.cur.map)IA.cur.map=Object.assign({},S.map);const ci=a.coluna==null?-1:iaCol(a.coluna);if(a.coluna!=null&&!(ci>=0))throw new Error('coluna "'+a.coluna+'" não existe');S.map[k]=ci;S.userMap=true;IA.cur.desc.push('campo '+k+' → '+(ci>=0?S.headers[ci]:'(nenhuma)'));iaChanged();return {ok:true}}},
- {name:'set_rule',description:'Muda uma regra padrão: custoIgualVenda (true/false), formaPadrao (texto, forma de pagamento quando vazia) ou vendedorPadrao (texto).',inputSchema:{type:'object',properties:{regra:{type:'string',enum:['custoIgualVenda','formaPadrao','vendedorPadrao']},valor:{}},required:['regra','valor']},execute:(a)=>{if(!['custoIgualVenda','formaPadrao','vendedorPadrao'].includes(a.regra))throw new Error('regra inválida');if(!IA.cur.rules)IA.cur.rules=Object.assign({},S.rules);S.rules[a.regra]=a.regra==='custoIgualVenda'?!!a.valor:String(a.valor);IA.cur.desc.push('regra '+a.regra+' = '+S.rules[a.regra]);iaChanged();return {ok:true}}}
+ {name:'set_rule',description:'Muda uma regra padrão: custoIgualVenda (true/false), formaPadrao (texto, forma de pagamento quando vazia) ou vendedorPadrao (texto).',inputSchema:{type:'object',properties:{regra:{type:'string',enum:['custoIgualVenda','formaPadrao','vendedorPadrao']},valor:{}},required:['regra','valor']},execute:(a)=>{if(!['custoIgualVenda','formaPadrao','vendedorPadrao'].includes(a.regra))throw new Error('regra inválida');if(!IA.cur.rules)IA.cur.rules=Object.assign({},S.rules);S.rules[a.regra]=a.regra==='custoIgualVenda'?!!a.valor:String(a.valor);try{const l=corrRule(a.regra,S.rules[a.regra]);if(l)IA.cur.learn.push(l)}catch(_){}IA.cur.desc.push('regra '+a.regra+' = '+S.rules[a.regra]);iaChanged();return {ok:true}}}
 ];
-function iaUndoLast(){const u=IA.undo.pop();if(!u)return false;u.cells.slice().reverse().forEach(([ri,ci,old])=>{if(S.rows[ri])S.rows[ri][ci]=old});if(u.map)S.map=u.map;if(u.rules)S.rules=u.rules;iaChanged();return true}
+function iaUndoLast(){const u=IA.undo.pop();if(!u)return false;u.cells.slice().reverse().forEach(([ri,ci,old])=>{if(S.rows[ri])S.rows[ri][ci]=old});if(u.map)S.map=u.map;if(u.rules)S.rules=u.rules;(u.learn||[]).slice().reverse().forEach(corrUndo);iaChanged();return true}
 function iaMsg(cls,txt){const el=document.getElementById('iaChat');if(!el)return null;const d=document.createElement('div');d.className='iam '+cls;d.textContent=txt;el.appendChild(d);el.scrollTop=el.scrollHeight;return d}
 function iaCopyErr(code){return {not_granted:'Você não permitiu o uso do Claude neste painel.',sampling_disabled:'O Claude não está disponível para a sua conta.',rate_limited:'Muitas chamadas seguidas ou limite de uso atingido. Tente de novo daqui a pouco.',upstream_error:'Falha momentânea. Envie a mensagem de novo.',refused:'Não consegui atender esse pedido.',empty_completion:'Não veio resposta. Reformule o pedido.',prompt_too_large:'A conversa ficou grande demais. Clique em "Nova conversa".',session_expired:'Entre de novo no Claude e tente outra vez.',tools_unavailable:'Este ambiente não permite que o Claude mexa na planilha.'}[code]||'Não consegui falar com o Claude agora.'}
 async function iaSend(text){text=(text||'').trim();if(!text||IA.busy||!IA.sample)return;
@@ -2795,7 +2811,7 @@ async function iaSend(text){text=(text||'').trim();if(!text||IA.busy||!IA.sample
   try{const r=await IA.sample([{role:'user',content:IA_RULES}].concat(IA.turns),{tools:IA_TOOLS(),signal:IA.ctl.signal,modelTier:'default',onText:({text})=>{bub.textContent=text;const el=document.getElementById('iaChat');if(el)el.scrollTop=el.scrollHeight}});
     bub.textContent=r.text+(r.truncated?'\n\n(resposta cortada — peça menos de cada vez)':'');IA.turns.push({role:'assistant',content:r.text})}
   catch(e){if(e&&e.text)bub.textContent=e.text;else bub.remove();if(!e||e.code!=='cancelled')iaMsg('t',iaCopyErr(e&&e.code));if(e&&(e.code==='not_granted'||e.code==='sampling_disabled'||e.code==='not_declared'))IA.sample=null}
-  const c=IA.cur;IA.cur=null;if(c&&(c.cells.length||c.map||c.rules)){IA.undo.push(c);iaMsg('t','Alterações aplicadas: '+c.desc.join(' · ')+'. Veja o resultado no Jarvis e em "Antes e depois".')}
+  const c=IA.cur;IA.cur=null;if(c&&(c.cells.length||c.map||c.rules)){IA.undo.push(c);iaMsg('t','Alterações aplicadas: '+c.desc.join(' · ')+'. Veja o resultado no Jarvis e em "Antes e depois".'+(c.learn&&c.learn.length?' Guardei '+c.learn.length+' correção(ões) para as próximas planilhas deste sistema.':''))}
   IA.busy=false;IA.ctl=null;iaUI()}
 function iaUI(){const b=$('#iaGo'),st=$('#iaStop'),un=$('#iaUndo'),ta=$('#iaIn');if(!b)return;const off=!IA.sample;b.disabled=IA.busy||off;if(ta){ta.disabled=IA.busy||off;ta.placeholder=off?(IA.checked?'Conversa disponível só pelo link do artefato no Claude':'Verificando o Claude…'):'Pergunte ou peça um ajuste… (Ctrl+Enter envia)'}st.hidden=!IA.busy;un.hidden=!IA.undo.length||IA.busy;un.textContent='↩ Desfazer última ('+IA.undo.length+')';const o=$('#jvOrb');if(o&&!JV.scan)o.dataset.st=IA.busy?'think':JV.st||'idle'}
 function renderIA(){const sug=$('#jvSug');if(!sug)return;
@@ -2822,6 +2838,10 @@ function jvHero(){const st=jvStatus();const el=$('#jvHero');if(!el)return;if(st.
   const arc=(v,off,col)=>`<circle r="46" cx="60" cy="60" fill="none" stroke="${col}" stroke-width="9" stroke-dasharray="${(v/tot*289).toFixed(1)} 289" stroke-dashoffset="${(-off/tot*289).toFixed(1)}" transform="rotate(-90 60 60)"/>`;
   el.innerHTML=`<div class="jv-hero ${st.cls}"><svg viewBox="0 0 120 120" width="112" height="112" role="img" aria-label="${INT(c.ok)} sem alteração, ${INT(c.adj)} ajustados, ${INT(c.att)} com atenção"><circle r="46" cx="60" cy="60" fill="none" stroke="var(--line)" stroke-width="9"/>${arc(c.ok,0,'var(--ok)')}${arc(c.adj,c.ok,'var(--brand)')}${arc(c.att,c.ok+c.adj,'var(--bad)')}<text x="60" y="61" text-anchor="middle" class="jv-pc">${sim}%</text><text x="60" y="75" text-anchor="middle" class="jv-pl">do modelo</text></svg>
   <div class="jv-ht2"><b>${esc(st.title)}</b><span>${esc(st.sub)}</span><div class="jv-leg"><span><i style="--c:var(--ok)"></i>${INT(c.ok)} intactos</span><span><i style="--c:var(--brand)"></i>${INT(c.adj)} ajustados</span><span><i style="--c:var(--bad)"></i>${INT(c.att)} com atenção</span></div></div></div>`}
+function jvLearn(){const el=$('#jvLearn');if(!el)return;const sis=getSis();const L=sis&&CORR[corrKey()];const n=L?(L.rep||[]).length+Object.keys(L.rules||{}).length:0;
+  if(!sis){el.innerHTML=S.headers&&S.headers.length?'<div class="jv-card jv-ln"><b>Aprendizado por sistema</b><span class="note" style="margin:0">Informe o <b>sistema de origem</b> (campo na aba Arquivo) para eu lembrar suas correções nas próximas lojas.</span></div>':'';return}
+  const ap=S.learned;el.innerHTML=`<div class="jv-card jv-ln"><b>Aprendizado: ${esc(sis)}</b>${ap?`<span style="margin:0">Apliquei automaticamente <b>${INT(ap.cells)}</b> célula(s) e <b>${INT(ap.rules)}</b> regra(s) lembradas deste sistema.</span>`:''}<span class="note" style="margin:0">${n?`${INT(n)} correção(ões) guardada(s) para este sistema e tipo. Novas correções feitas pela conversa entram sozinhas.`:'Nada guardado ainda. As correções que você pedir na conversa ficam lembradas para as próximas lojas deste sistema.'}</span>${n?'<div class="row-actions"><button type="button" class="btn alt sm" id="jvForget">Esquecer o que foi aprendido</button></div>':''}</div>`;
+  const f=$('#jvForget');if(f)f.onclick=()=>{corrForget();toast('Esquecido. Vale a partir da próxima planilha.');jvLearn()}}
 function jvDiff(){const el=$('#jvDiff');if(!el)return;if(!(S.recs&&S.type&&S.headers.length)){el.innerHTML='';return}let rows=[];try{rows=confRows()}catch(e){}
   if(!rows.length){el.innerHTML='';return}
   el.innerHTML=`<div class="jv-card"><h3>Diferenças de valores</h3><div class="jv-rows">${rows.map(r=>{const hasE=r.has&&!isNaN(r.e);const base=hasE?r.e:r.a;const mx=Math.max(Math.abs(base),Math.abs(r.a),1e-9);const wa=Math.min(100,Math.abs(base)/mx*100),wb=Math.min(100,Math.abs(r.a)/mx*100);const bad=hasE&&!r.ok;
@@ -2841,7 +2861,7 @@ function jvRefresh(){const hasData=!!(S.headers&&S.headers.length&&S.recs&&S.typ
   res.hidden=!hasData;emp.hidden=hasData;$('#jvSub').textContent=hasData?(st.title):'Assistente de importação';
   const nb=$('#navVer');if(nb){const n=(st.n.err||0)+(st.n.gate?1:0);nb.hidden=!n;nb.textContent=n}
   const bd=$('#jvBadge');if(bd){const n=(st.n.err||0)+(st.n.gate?1:0);if(n&&!JV.open){bd.hidden=false;bd.textContent=n>99?'99+':n}else bd.hidden=true}
-  if(hasData){try{jvHero();renderRep();jvDiff();renderConf();jvBA();renderVer()}catch(e){}}
+  if(hasData){try{jvHero();jvLearn();renderRep();jvDiff();renderConf();jvBA();renderVer()}catch(e){}}
   iaUI()}
 function jvScanRun(){/* animação de análise ao carregar a planilha */
   const sc=$('#jvScan');if(!sc||JV.scan)return;JV.scan=true;if(!IA.busy){IA.turns=[];const ch=$('#iaChat');if(ch)ch.innerHTML=''}const res=$('#jvRes');res.hidden=true;$('#jvEmpty').hidden=true;sc.hidden=false;$('#jvOrb').dataset.st='scan';
@@ -2855,8 +2875,8 @@ function jvInit(){const o=$('#jvOrb');if(!o||o.dataset.ok)return;o.dataset.ok='1
   document.addEventListener('click',e=>{const g=e.target.closest&&e.target.closest('#jv [data-go]');if(g){jvClose();goTab(g.dataset.go)}})}
 (async()=>{try{IA.sample=await (window.claude&&window.claude.use?window.claude.use('sample'):null)}catch(e){IA.sample=null}IA.checked=true;try{const l=IA.sample&&IA.sample.limits?await IA.sample.limits().catch(()=>null):null;if(IA.sample&&l&&!l.tools)IA.sample=null}catch(e){}renderIA()})();
 try{jvInit();jvRefresh()}catch(e){}
-try{const sy=$('#sistema');if(sy){sy.addEventListener('change',()=>{if(S.headers.length){S.userMap=false;autoMapAll();run()}});sy.addEventListener('focus',fillSisList)}fillSisList()}catch(e){}
-window.__painel={JV,jvOpen,jvClose,jvRefresh,jvScanRun,jvStatus,bankCheck,IA,IA_TOOLS,iaState,iaUndoLast,iaSnapshotStart,MAPS,applyMapa,saveMapa,autoMapAll,parseErp,learnFrom,constrFor,autoMap,makePreview,makeBefore,openPreview,HISTREF:()=>HIST,S,buildWorkbook,cleanName,lotsFor,lotBytes,summaryText,slackMention,slackText};
+try{const sy=$('#sistema');if(sy){sy.addEventListener('change',()=>{if(S.headers.length){S.userMap=false;autoMapAll();try{applyLearned()}catch(e){}run()}});sy.addEventListener('focus',fillSisList)}fillSisList()}catch(e){}
+window.__painel={CORR:()=>CORR,corrCell,applyLearned,JV,jvOpen,jvClose,jvRefresh,jvScanRun,jvStatus,bankCheck,IA,IA_TOOLS,iaState,iaUndoLast,iaSnapshotStart,MAPS,applyMapa,saveMapa,autoMapAll,parseErp,learnFrom,constrFor,autoMap,makePreview,makeBefore,openPreview,HISTREF:()=>HIST,S,buildWorkbook,cleanName,lotsFor,lotBytes,summaryText,slackMention,slackText};
 S.fileName='exemplo_vendas.xlsx';
 loadAoa(SAMPLE,'exemplo_vendas.xlsx',true);
 })();
