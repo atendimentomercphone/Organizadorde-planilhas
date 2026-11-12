@@ -410,6 +410,87 @@ tbody tr:hover .pill{transform:scale(1.04)}
 .ax{font:500 10.5px var(--f-body);fill:var(--muted)}
 .vb:hover{filter:brightness(1.15)}
 @media (prefers-reduced-motion:reduce){.sec,.ins-c,.dn-seg,.gg-v,.hb-t i,.vb{animation:none!important}.btn,.kpi,.ins-c,.drop,.si{transition:none!important}}
+
+/* ===== v4: repaginação animada (regras do ui-ux-pro-max: contraste, alvos 44px, reduced-motion, só transform/opacity) ===== */
+@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+body::before,body::after{content:"";position:fixed;z-index:-1;pointer-events:none;width:46vmax;height:46vmax;border-radius:50%;filter:blur(70px);opacity:.5}
+body::before{left:-14vmax;top:-18vmax;background:radial-gradient(circle,color-mix(in srgb,var(--c1) 30%,transparent),transparent 65%);animation:aur1 22s ease-in-out infinite alternate}
+body::after{right:-16vmax;top:12vmax;background:radial-gradient(circle,color-mix(in srgb,var(--c5) 24%,transparent),transparent 65%);animation:aur2 28s ease-in-out infinite alternate}
+@keyframes aur1{to{transform:translate3d(10vmax,8vmax,0) scale(1.15)}}
+@keyframes aur2{to{transform:translate3d(-9vmax,10vmax,0) scale(1.1)}}
+.appbar{position:sticky;top:0;z-index:20;backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);background:color-mix(in srgb,var(--surface) 78%,transparent);border-bottom:1px solid color-mix(in srgb,var(--c1) 14%,var(--line))}
+.appbar::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--c1),var(--c5),var(--c2),transparent);background-size:200% 100%;animation:flow 6s linear infinite;opacity:.8}
+@keyframes flow{to{background-position:-200% 0}}
+.side{background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.si{position:relative;min-height:44px;border-radius:12px}
+.si .sn{transition:transform .25s var(--ease),background .25s,color .25s,box-shadow .25s}
+.si:hover .sn{transform:scale(1.12) rotate(-4deg)}
+.si[aria-current="page"],.si.on,.si.act,.si[aria-selected="true"]{background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 16%,transparent),transparent);box-shadow:inset 3px 0 0 var(--c1)}
+.si[aria-current="page"] .sn,.si.on .sn,.si.act .sn,.si[aria-selected="true"] .sn{background:var(--grad);color:#fff;box-shadow:0 6px 14px -6px var(--glow)}
+.bdg{animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--c3) 50%,transparent)}50%{box-shadow:0 0 0 6px transparent}}
+.sec{border-radius:20px;border:1px solid color-mix(in srgb,var(--c1) 10%,var(--line));background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(6px)}
+.sec .sec-h h2,.tabtitle{letter-spacing:-.01em}
+.hero h1{letter-spacing:-.025em}
+.drop-ic{animation:floaty 5s ease-in-out infinite}
+@keyframes floaty{50%{transform:translateY(-5px)}}
+.drop{position:relative;overflow:hidden}
+.drop::before{content:"";position:absolute;inset:-2px;border-radius:inherit;padding:2px;background:conic-gradient(from var(--ang),var(--c1),var(--c5),var(--c2),var(--c1));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 6s linear infinite;opacity:.55;pointer-events:none}
+@keyframes spin{to{--ang:360deg}}
+.btn{position:relative;overflow:hidden;min-height:44px}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-120%);transition:transform .6s var(--ease)}
+.btn:hover::after{transform:translateX(120%)}
+.btn.alt::after{display:none}
+.btn .rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(4);opacity:0}}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--c1) 70%,#fff);outline-offset:2px;border-radius:8px}
+input,select,textarea{min-height:44px;transition:border-color .2s,box-shadow .25s}
+input:focus,select:focus,textarea:focus{border-color:var(--c1);box-shadow:0 0 0 4px color-mix(in srgb,var(--c1) 18%,transparent)}
+.bar{overflow:hidden;position:relative}
+.bar>i{position:relative;overflow:hidden}
+.bar>i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);transform:translateX(-100%);animation:shim 1.4s linear infinite}
+@keyframes shim{to{transform:translateX(100%)}}
+.toast{animation:toastIn .35s var(--ease) both}
+@keyframes toastIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+.pill{position:relative}
+.kpi{transition:transform .25s var(--ease),box-shadow .3s}
+.kpi:hover{transform:translateY(-3px) scale(1.015);box-shadow:var(--sh-h)}
+.kpis .kpi{animation:secIn .5s var(--ease) both}
+.kpis .kpi:nth-child(2){animation-delay:.05s}.kpis .kpi:nth-child(3){animation-delay:.1s}.kpis .kpi:nth-child(4){animation-delay:.15s}.kpis .kpi:nth-child(5){animation-delay:.2s}.kpis .kpi:nth-child(6){animation-delay:.25s}
+.kpi .spk{display:block;width:100%;height:30px;margin-top:6px;overflow:visible}
+.spk path.l{fill:none;stroke:var(--c1);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s var(--ease) .2s forwards}
+.spk path.a{fill:url(#spkg);opacity:0;animation:fadeA .8s ease .6s forwards}
+.spk circle{fill:var(--c1);opacity:0;animation:fadeA .4s ease 1s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeA{to{opacity:1}}
+tbody tr{transition:background .2s}
+tbody tr:hover{background:color-mix(in srgb,var(--c1) 7%,transparent)}
+/* gráficos novos */
+.ar{width:100%;height:auto;display:block;overflow:visible}
+.ar .ln{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.3s var(--ease) forwards}
+.ar .fl{opacity:0;animation:fadeA .9s ease .5s forwards}
+.ar .dt{opacity:0;animation:fadeA .4s ease 1.1s forwards;cursor:pointer;transition:r .2s}
+.ar .dt:hover{r:7}
+.ar .vl{font:700 11px var(--f-body);fill:var(--ink);opacity:0;animation:fadeA .4s ease 1.1s forwards}
+.heat{display:grid;gap:5px}
+.heat-r{display:grid;grid-template-columns:44px repeat(var(--cols),1fr);gap:5px;align-items:center;font-size:11.5px;color:var(--muted)}
+.heat-c{height:30px;border-radius:8px;background:color-mix(in srgb,var(--c1) calc(var(--v)*88% + 6%),var(--soft));display:grid;place-items:center;font-weight:700;font-size:11px;color:color-mix(in srgb,var(--ink) calc(var(--v)*0% + 100%),#fff);animation:pop .5s var(--ease) both;animation-delay:calc(var(--i)*18ms);transition:transform .2s}
+.heat-c:hover{transform:scale(1.12)}
+.heat-c.hi{color:#fff}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+.rings{display:flex;gap:18px;flex-wrap:wrap;justify-content:space-around}
+.ring{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.ring svg{width:92px;height:92px}
+.ring .rv{font:700 18px var(--f-display);fill:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:color-mix(in srgb,var(--c1) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--c1) 22%,var(--line));font-size:12.5px;animation:pop .5s var(--ease) both}
+.chip b{font-variant-numeric:tabular-nums}
+.an-c{transition:transform .25s var(--ease),box-shadow .3s}
+.an-c:hover{transform:translateY(-2px);box-shadow:var(--sh-h)}
+.tt{position:fixed;z-index:50;pointer-events:none;background:var(--ink);color:var(--bg);padding:6px 10px;border-radius:8px;font-size:12px;box-shadow:0 8px 24px -8px rgba(0,0,0,.4);opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;max-width:240px}
+.tt.on{opacity:1;transform:none}
+@media (pointer:coarse){.btn,.si,input,select{min-height:48px}}
+@media (prefers-reduced-motion:reduce){body::before,body::after,.appbar::after,.drop::before,.drop-ic,.bdg,.bar>i::after,.ar .ln,.ar .fl,.ar .dt,.ar .vl,.heat-c,.chip,.kpis .kpi,.spk path,.spk circle,.toast{animation:none!important}.spk path.l,.ar .ln{stroke-dashoffset:0!important}.ar .fl,.ar .dt,.ar .vl,.spk path.a,.spk circle{opacity:1!important}.btn::after{display:none}}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -1458,6 +1539,32 @@ function insFields(){const k=S.type,T=TYPES[k];return T&&T.fields?T.fields:[]}
 function monthKey(d){const m=/^(\d{2})\/(\d{2})\/(\d{4})/.exec(String(d||''));return m?m[3]+'-'+m[2]:null}
 const MES3=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 function monthLbl(k){const [y,m]=k.split('-');return MES3[+m-1]+'/'+y.slice(2)}
+
+/* ---------- v4: gráficos novos ---------- */
+let _gid=0;
+function smooth(pts){if(pts.length<2)return 'M'+pts.map(p=>p.join(',')).join('L');let d='M'+pts[0][0]+','+pts[0][1];for(let i=0;i<pts.length-1;i++){const p0=pts[i-1]||pts[i],p1=pts[i],p2=pts[i+1],p3=pts[i+2]||p2;d+=' C'+(p1[0]+(p2[0]-p0[0])/6)+','+(p1[1]+(p2[1]-p0[1])/6)+' '+(p2[0]-(p3[0]-p1[0])/6)+','+(p2[1]-(p3[1]-p1[1])/6)+' '+p2[0]+','+p2[1]}return d}
+function areaChart(series,labels,{fmt=INT,h=210,pct=false}={}){const W=560,H=h,L=44,R=16,T=20,B=30,n=labels.length;if(!n)return '';const id='ag'+(++_gid);
+  let mx=Math.max(...series.flatMap(x=>x.v),1);if(pct)mx=100;else{const e=Math.pow(10,Math.floor(Math.log10(mx)));mx=Math.ceil(mx/e*2)/2*e*1}
+  const X=i=>n===1?(L+W-R)/2:L+(W-L-R)*i/(n-1),Y=v=>T+(H-T-B)*(1-v/mx);
+  const grid=[0,.25,.5,.75,1].map(f=>{const y=T+(H-T-B)*(1-f);return `<line class="gl" x1="${L}" x2="${W-R}" y1="${y}" y2="${y}"/><text class="ax" x="${L-8}" y="${y+4}" text-anchor="end">${fmt(mx*f)}</text>`}).join('');
+  const xl=labels.map((l,i)=>`<text class="ax" x="${X(i)}" y="${H-8}" text-anchor="middle">${esc(l)}</text>`).join('');
+  const defs='<defs>'+series.map((x,k)=>`<linearGradient id="${id}_${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${x.c}" stop-opacity=".38"/><stop offset="1" stop-color="${x.c}" stop-opacity="0"/></linearGradient>`).join('')+'</defs>';
+  const body=series.map((x,k)=>{const pts=x.v.map((v,i)=>[+X(i).toFixed(1),+Y(v).toFixed(1)]);const d=smooth(pts);const last=pts[pts.length-1];
+    return `<path class="fl" d="${d} L${last[0]},${H-B} L${pts[0][0]},${H-B} Z" fill="url(#${id}_${k})"/><path class="ln" pathLength="1" d="${d}" stroke="${x.c}"/>`+pts.map((q,i)=>`<circle class="dt" cx="${q[0]}" cy="${q[1]}" r="4.5" fill="var(--surface)" stroke="${x.c}" stroke-width="2.4" data-tt="${esc(labels[i]+' · '+(series.length>1?x.l+': ':'')+fmt(x.v[i]))}"/>`).join('')+`<text class="vl" x="${last[0]}" y="${last[1]-10}" text-anchor="middle">${fmt(x.v[x.v.length-1])}</text>`}).join('');
+  return `<svg class="ar" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(series.map(x=>x.l+': '+x.v.map((v,i)=>labels[i]+' '+fmt(v)).join(', ')).join('; '))}">${defs}${grid}${xl}${body}</svg>`+(series.length>1?`<div class="ins-leg">${series.map(x=>`<span><i style="background:${x.c}"></i>${esc(x.l)}</span>`).join('')}</div>`:'')}
+function spark(vals,color){if(vals.length<2||vals.every(v=>!v))return '';const W=100,H=30,mx=Math.max(...vals,1),mn=Math.min(...vals,0);const pts=vals.map((v,i)=>[i/(vals.length-1)*W,H-3-(H-8)*(v-mn)/((mx-mn)||1)]);const d=smooth(pts);const l=pts[pts.length-1];
+  return `<svg class="spk" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="spkg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color||'var(--c1)'}" stop-opacity=".3"/><stop offset="1" stop-color="${color||'var(--c1)'}" stop-opacity="0"/></linearGradient></defs><path class="a" d="${d} L${W},${H} L0,${H} Z"/><path class="l" pathLength="1" d="${d}"/><circle cx="${l[0]-1.5}" cy="${l[1]}" r="2.6"/></svg>`}
+function heatHTML(rows,cols,M,fmt=INT){const mx=Math.max(1,...M.flat());let i=0;return `<div class="heat">${rows.map((r,y)=>`<div class="heat-r" style="--cols:${cols.length}"><span>${esc(r)}</span>${cols.map((c,x)=>{const v=M[y][x],f=v/mx;return `<span class="heat-c${f>.55?' hi':''}" style="--v:${f.toFixed(2)};--i:${i++}" data-tt="${esc(r+' · '+c+': '+fmt(v))}">${v?fmt(v):''}</span>`}).join('')}</div>`).join('')}<div class="heat-r" style="--cols:${cols.length}"><span></span>${cols.map(c=>`<span style="text-align:center">${esc(c)}</span>`).join('')}</div></div>`}
+function ringsHTML(items){return `<div class="rings">${items.map(it=>{const r=38,c=2*Math.PI*r,v=Math.max(0,Math.min(100,it.v));return `<div class="ring"><svg viewBox="0 0 92 92" role="img" aria-label="${esc(it.l)} ${v.toFixed(0)}%"><circle cx="46" cy="46" r="${r}" fill="none" stroke="var(--soft)" stroke-width="9"/><circle class="gg-v" cx="46" cy="46" r="${r}" fill="none" stroke="${it.c}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" style="--len:${c.toFixed(1)};--to:${(c*(1-v/100)).toFixed(1)}" transform="rotate(-90 46 46)"/><text class="rv" x="46" y="52" text-anchor="middle">${v.toFixed(0)}%</text></svg>${esc(it.l)}</div>`}).join('')}</div>`}
+function histBins(vals,bins){const a=vals.filter(v=>isFinite(v));if(!a.length)return null;return bins.map(([l,lo,hi])=>({l,v:a.filter(v=>v>=lo&&v<hi).length}))}
+function histChart(b,c='var(--c1)'){const mx=Math.max(1,...b.map(x=>x.v));return `<div class="hist" role="img" aria-label="${esc(b.map(x=>x.l+': '+x.v).join(', '))}" style="display:grid;grid-template-columns:repeat(${b.length},1fr);gap:8px;align-items:end;height:160px">${b.map((x,i)=>`<div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;min-width:0"><b style="font-size:11px">${INT(x.v)}</b><i class="vb" style="width:100%;height:${Math.max(x.v?3:0,x.v/mx*100)}%;background:${c};border-radius:8px 8px 3px 3px;animation-delay:${i*60}ms" data-tt="${esc(x.l+': '+INT(x.v))}"></i><span class="ax" style="font-size:10.5px;color:var(--muted);text-align:center;line-height:1.1">${esc(x.l)}</span></div>`).join('')}</div>`}
+(function(){/* tooltip global + ripple */
+  let tt=null;const get=()=>tt||(tt=Object.assign(document.createElement('div'),{className:'tt',role:'tooltip'}),document.body.appendChild(tt),tt);
+  document.addEventListener('pointerover',e=>{const t=e.target.closest&&e.target.closest('[data-tt]');if(!t)return;const el=get();el.textContent=t.getAttribute('data-tt');el.classList.add('on')});
+  document.addEventListener('pointermove',e=>{if(!tt||!tt.classList.contains('on'))return;tt.style.left=Math.min(innerWidth-tt.offsetWidth-8,e.clientX+14)+'px';tt.style.top=(e.clientY+16)+'px'});
+  document.addEventListener('pointerout',e=>{if(tt&&e.target.closest&&e.target.closest('[data-tt]'))tt.classList.remove('on')});
+  document.addEventListener('pointerdown',e=>{const b=e.target.closest&&e.target.closest('.btn:not(.alt)');if(!b||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height),i=document.createElement('i');i.className='rip';i.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;b.appendChild(i);setTimeout(()=>i.remove(),650)});
+})();
 function insightsHTML(){const k=S.type,R=S.recs.filter(r=>!r.dup),tot=R.length;if(!tot)return '';
   const st={ok:0,adj:0,att:0};R.forEach(r=>st[status(r)]++);const rem=(S.postDisc||[]).length,pct=(st.ok+st.adj)/tot*100;
   const fl=Object.fromEntries(insFields().map(f=>[f.key,f.label||f.key]));
@@ -1482,6 +1589,27 @@ function insightsHTML(){const k=S.type,R=S.recs.filter(r=>!r.dup),tot=R.length;i
     cards.push(`<div class="ins-c"><h4>Produtos por tipo</h4><div class="ins-row">${svgDonut(ts.map(([l,v],i)=>({l,v,c:CH[i%6]})),{center:INT(tot),sub:'itens',size:150,thick:18})}<ul class="lg">${ts.map(([l,v],i)=>`<li><i style="background:${CH[i%6]}"></i>${esc(l)}<b>${INT(v)}</b></li>`).join('')}</ul></div></div>`);
     const tv=R.map(r=>({l:r.out.modelo||'-',v:(r._sale||0)})).sort((a,b)=>b.v-a.v).slice(0,6).filter(x=>x.v>0);if(tv.length)cards.push(`<div class="ins-c"><h4>Maior valor em venda (estoque)</h4>${hbars(tv.map(x=>({l:String(x.l).slice(0,34),v:x.v,t:BRL(x.v)})),{fmt:BRL})}</div>`)}
   if(k==='os'){const m={};R.forEach(r=>{const mk=monthKey(r.out.entrada||r.out.data||r.out.dt_ent);if(mk)m[mk]=(m[mk]||0)+(r._tot||0)});const ks=Object.keys(m).sort().slice(-12);if(ks.length)cards.push(`<div class="ins-c wide"><h4>Valor de OS por mês</h4>${vbars(ks.map(x=>({l:monthLbl(x),v:[m[x]]})),[{l:'Valor',c:CH[0]}])}</div>`)}
+
+  /* v4: gráficos adicionais por tipo */
+  const has=(r,k)=>{const x=r.out&&r.out[k];return x!==undefined&&x!==null&&String(x).trim()!==''&&String(x)!=='0'&&String(x)!=='0.00'};
+  const topN=(arr,n=6)=>{const m={};arr.forEach(x=>{if(x)m[x]=(m[x]||0)+1});return top(m,n)};
+  if(k==='clientes'||k==='fornecedores'){const rg=[['Documento','doc',CH[0]],['E-mail','email',CH[1]],['Telefone','tel',CH[4]]].filter(x=>insFields().some(f=>f.key===x[1]));
+    if(rg.length)cards.push(`<div class="ins-c wide"><h4>Completude dos contatos</h4>${ringsHTML(rg.map(([l,key,c])=>({l,c,v:R.filter(r=>has(r,key)).length/tot*100})))}</div>`);
+    if(k==='clientes'){const uf=topN(R.map(r=>String(r.out.uf||'').toUpperCase().trim()),8);if(uf.length)cards.push(`<div class="ins-c"><h4>Clientes por estado</h4>${hbars(uf.map(([l,v])=>({l,v})))}</div>`);
+      const ci=topN(R.map(r=>String(r.out.cidade||'').trim()),6);if(ci.length)cards.push(`<div class="ins-c"><h4>Principais cidades</h4><div class="ins-row">${svgDonut(ci.map(([l,v],i)=>({l,v,c:CH[i%6]})),{center:INT(ci.reduce((a,x)=>a+x[1],0)),sub:'clientes',size:150,thick:18})}<ul class="lg">${ci.map(([l,v],i)=>`<li><i style="background:${CH[i%6]}"></i>${esc(l)}<b>${INT(v)}</b></li>`).join('')}</ul></div></div>`)}}
+  if(k==='produtos'){const mc=topN(R.map(r=>String(r.out.marca||'').trim()),6);if(mc.length)cards.push(`<div class="ins-c"><h4>Produtos por marca</h4><div class="ins-row">${svgDonut(mc.map(([l,v],i)=>({l,v,c:CH[i%6]})),{center:INT(mc.reduce((a,x)=>a+x[1],0)),sub:'itens',size:150,thick:18})}<ul class="lg">${mc.map(([l,v],i)=>`<li><i style="background:${CH[i%6]}"></i>${esc(l)}<b>${INT(v)}</b></li>`).join('')}</ul></div></div>`);
+    const eb=histBins(R.map(r=>Number(r.out.qtd)),[['Zerado',-1e9,1],['1–2',1,3],['3–5',3,6],['6–10',6,11],['11+',11,1e12]]);if(eb&&eb.some(x=>x.v))cards.push(`<div class="ins-c"><h4>Itens por faixa de estoque</h4>${histChart(eb,'var(--c6)')}</div>`);
+    const mg=histBins(R.map(r=>{const c=Number(r.out.custo),v=Number(r.out.venda);return c>0&&v>0?(v-c)/v*100:NaN}),[['Negativa',-1e9,0],['0–10%',0,10],['10–20%',10,20],['20–30%',20,30],['30–50%',30,50],['50%+',50,1e9]]);if(mg&&mg.some(x=>x.v))cards.push(`<div class="ins-c wide"><h4>Margem de lucro (venda sobre custo)</h4>${histChart(mg,'var(--c2)')}</div>`)}
+  if(k==='servicos'){const pb=histBins(R.map(r=>Number(r.out.preco)),[['Até R$ 50',-1e9,50],['50–100',50,100],['100–200',100,200],['200–500',200,500],['500+',500,1e12]]);if(pb&&pb.some(x=>x.v))cards.push(`<div class="ins-c wide"><h4>Serviços por faixa de preço</h4>${histChart(pb,'var(--c5)')}</div>`)}
+  if(k==='vendas'){const dw=[0,0,0,0,0,0,0],pr={},vd={};R.forEach(r=>{const g=r.g;if(!g)return;const m=/^(\d{2})\/(\d{2})\/(\d{4})/.exec(String(g.data||''));if(m){const d=new Date(+m[3],+m[2]-1,+m[1]);if(!isNaN(d))dw[(d.getDay()+6)%7]++}
+      (g.items||[]).forEach(i=>{pr[i.nome]=(pr[i.nome]||0)+(i.qtd||0)});if(g.vend)vd[g.vend]=(vd[g.vend]||0)+g.total});
+    if(dw.some(Boolean))cards.push(`<div class="ins-c"><h4>Vendas por dia da semana</h4>${histChart(['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'].map((l,i)=>({l,v:dw[i]})),'var(--c1)')}</div>`);
+    const tp=top(pr,6);if(tp.length)cards.push(`<div class="ins-c"><h4>Produtos mais vendidos (quantidade)</h4>${hbars(tp.map(([l,v])=>({l:String(l).slice(0,34),v})))}</div>`);
+    const tv=top(vd,6);if(tv.length>1)cards.push(`<div class="ins-c"><h4>Faturamento por vendedor</h4>${hbars(tv.map(([l,v])=>({l,v,t:BRL(v)})),{fmt:BRL})}</div>`);
+    const tk=R.filter(r=>r.g&&r.g.total>0);if(tk.length)cards.push(`<div class="ins-c"><h4>Resumo das vendas</h4><div class="chips"><span class="chip">Ticket médio <b>${BRL(tk.reduce((a,r)=>a+r.g.total,0)/tk.length)}</b></span><span class="chip">Maior venda <b>${BRL(Math.max(...tk.map(r=>r.g.total)))}</b></span><span class="chip">Itens por venda <b>${(tk.reduce((a,r)=>a+(r.g.items||[]).length,0)/tk.length).toFixed(1).replace('.',',')}</b></span></div></div>`)}
+  if(k==='os'){const st=topN(R.map(r=>String(r.out.sit||'').trim()),6);if(st.length)cards.push(`<div class="ins-c"><h4>Ordens por situação</h4><div class="ins-row">${svgDonut(st.map(([l,v],i)=>({l,v,c:CH[i%6]})),{center:INT(tot),sub:'ordens',size:150,thick:18})}<ul class="lg">${st.map(([l,v],i)=>`<li><i style="background:${CH[i%6]}"></i>${esc(l)}<b>${INT(v)}</b></li>`).join('')}</ul></div></div>`);
+    const tc=topN(R.map(r=>String(r.out.tec||'').trim()),6);if(tc.length>1)cards.push(`<div class="ins-c"><h4>Ordens por técnico</h4>${hbars(tc.map(([l,v])=>({l,v})))}</div>`)}
+  if(k==='financeiro'){const cat=topN(R.map(r=>String(r.out.pessoa||r.out.cat||'').trim()),6);if(cat.length>1)cards.push(`<div class="ins-c"><h4>Mais frequentes (pessoa / categoria)</h4>${hbars(cat.map(([l,v])=>({l:String(l).slice(0,34),v})))}</div>`)}
   return `<div class="ins"><div class="ins-h"><h3>Painel de métricas</h3><small>Gráficos calculados sobre os ${INT(tot)} registros já ajustados</small></div><div class="ins-g">${cards.join('')}</div></div>`}
 function animateNums(root){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;root.querySelectorAll('.kpi .v').forEach(el=>{const t=el.textContent.trim();const m=/^(R\$\s?)?(-?[\d.]+)(,(\d+))?$/.exec(t);if(!m)return;const dec=m[4]?m[4].length:0,end=parseFloat(m[2].replace(/\./g,'')+(m[4]?'.'+m[4]:''));if(!isFinite(end)||end===0)return;const pre=m[1]||'',t0=performance.now(),D=700;const f=n=>pre+n.toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec});const step=now=>{const p=Math.min(1,(now-t0)/D),e=1-Math.pow(1-p,3);el.textContent=f(end*e);if(p<1)requestAnimationFrame(step);else el.textContent=t};requestAnimationFrame(step)})}
 function renderRep(){const el=$('#secRep');report();
@@ -2088,7 +2216,7 @@ function analytics(list,mode,n,allL,endK){n=n||(mode==='sem'?8:6);const keys=pke
 const pct=(a,b)=>b?Math.round(a/b*100):0;
 function dlt(cur,prev,lower){if(!cur&&!prev)return {t:'sem dados',c:'flat'};if(!prev)return {t:'novo',c:'flat'};const p=Math.round((cur-prev)/prev*100);if(!p)return {t:'= igual',c:'flat'};const up=p>0;return {t:(up?'▲ +':'▼ ')+p+'%',c:(up!==!!lower)?'good':'bad'}}
 function kpiList(A){const c=A.cur,p=A.prev;const q=b=>b.reg?pct(b.reg-b.att,b.reg):0;
-  return [{k:'Importações',v:INT(c.imp),d:dlt(c.imp,p.imp)},{k:'Registros importados',v:INT(c.reg),d:dlt(c.reg,p.reg)},{k:'Empresas atendidas',v:INT(c.emp.size),d:dlt(c.emp.size,p.emp.size)},{k:'Valor conferido',v:'R$ '+Math.round(c.valor).toLocaleString('pt-BR'),d:dlt(c.valor,p.valor)},{k:'Registros sem pendência',v:q(c)+'%',d:dlt(q(c),q(p))},{k:'Confirmadas no Slack',v:c.imp?pct(c.conf,c.imp)+'%':'—',d:dlt(c.imp?pct(c.conf,c.imp):0,p.imp?pct(p.conf,p.imp):0)}]}
+  const B=A.buckets,cf=b=>b.imp?pct(b.conf,b.imp):0;return [{k:'Importações',v:INT(c.imp),d:dlt(c.imp,p.imp),s:B.map(b=>b.imp)},{k:'Registros importados',v:INT(c.reg),d:dlt(c.reg,p.reg),s:B.map(b=>b.reg)},{k:'Empresas atendidas',v:INT(c.emp.size),d:dlt(c.emp.size,p.emp.size),s:B.map(b=>b.emp.size)},{k:'Valor conferido',v:'R$ '+Math.round(c.valor).toLocaleString('pt-BR'),d:dlt(c.valor,p.valor),s:B.map(b=>b.valor)},{k:'Registros sem pendência',v:q(c)+'%',d:dlt(q(c),q(p)),s:B.map(q)},{k:'Confirmadas no Slack',v:c.imp?pct(c.conf,c.imp)+'%':'—',d:dlt(c.imp?pct(c.conf,c.imp):0,p.imp?pct(p.conf,p.imp):0),s:B.map(cf)}]}
 function barSvg(vals,labels,title){const W=480,H=170,pad=26,bw=Math.min(40,(W-pad*2)/vals.length-8),mx=Math.max(1,...vals),step=(W-pad*2)/vals.length;
   const bars=vals.map((v,i)=>{const h=Math.round((H-60)*v/mx),x=pad+i*step+(step-bw)/2,y=H-28-h,cur=i===vals.length-1;return `<rect x="${x}" y="${y}" width="${bw}" height="${Math.max(h,v?2:0)}" rx="4" fill="var(--brand)" opacity="${cur?1:.4}"/><text x="${x+bw/2}" y="${y-5}" text-anchor="middle" font-size="11" fill="var(--ink)" font-weight="${cur?700:500}">${INT(v)}</text><text x="${x+bw/2}" y="${H-10}" text-anchor="middle" font-size="10.5" fill="var(--muted)">${esc(labels[i])}</text>`}).join('');
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}: ${vals.map((v,i)=>labels[i]+' '+v).join(', ')}" style="width:100%;height:auto;max-height:210px"><line x1="${pad}" y1="${H-28}" x2="${W-pad}" y2="${H-28}" stroke="var(--line)"/>${bars}</svg>`}
@@ -2161,11 +2289,20 @@ function cmpHtml(list,allL,mode,endK){const A=analytics(list,mode,12,allL,endK);
   return `<div class="an-c"><b>Comparar ${mode==='sem'?'semanas':'meses'}</b><div class="filters" style="margin:6px 0"><label><span class="lbl">${mode==='sem'?'Semana':'Mês'} A</span><select id="cmpA">${opt(ia)}</select></label><label><span class="lbl">${mode==='sem'?'Semana':'Mês'} B</span><select id="cmpB">${opt(ib)}</select></label></div>
   <div class="tw"><table><thead><tr><th>Indicador</th><th class="num">${esc(plabel(A.keys[ia],mode))} (A)</th><th class="num">${esc(plabel(A.keys[ib],mode))} (B)</th><th class="num">A vs B</th></tr></thead><tbody>${rows.map(r=>{const d=dlt(r[1],r[2]);return `<tr><td>${r[0]}</td><td class="num">${esc(r[3](r[1]))}</td><td class="num">${esc(r[3](r[2]))}</td><td class="num"><span class="dl ${d.c}">${d.t}</span></td></tr>`}).join('')}</tbody></table></div></div>`}
 function histPer(){const v=(histView.pptPer||'').split(':');if(v.length===2&&(v[0]==='sem'||v[0]==='mes'))return {mode:v[0],endK:v[1]};const m=histView.mode||'sem';return {mode:m,endK:pkeysBack(m,1)[0]}}
+const shortN=n=>n>=1e6?(n/1e6).toFixed(1).replace('.',',')+' mi':n>=1e3?Math.round(n/1e3)+' mil':INT(Math.round(n));
+function anCharts(A,list,mode){const per=mode==='sem'?'semana':'mês',B=A.buckets,q=b=>b.reg?pct(b.reg-b.att,b.reg):0,cf=b=>b.imp?pct(b.conf,b.imp):0;
+  const tp=A.tipos.filter(g=>g.cur.reg>0).slice(0,6);const totR=tp.reduce((a,g)=>a+g.cur.reg,0);
+  const DN=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],FX=['Manhã','Tarde','Noite'],M=DN.map(()=>FX.map(()=>0));const ks=new Set(A.keys);
+  (list||[]).forEach(h=>{if(!ks.has(pkey(h.ts,mode)))return;const d=new Date(h.ts);if(isNaN(d))return;const wd=(d.getDay()+6)%7,hr=d.getHours();M[wd][hr>=6&&hr<12?0:hr>=12&&hr<18?1:2]++});
+  const donut=tp.length?`<div class="ins-row">${svgDonut(tp.map((g,i)=>({l:g.key,v:g.cur.reg,c:CH[i%6]})),{center:shortN(totR),sub:'registros',size:160,thick:20})}<ul class="lg">${tp.map((g,i)=>`<li><i style="background:${CH[i%6]}"></i>${esc(g.key)}<b>${INT(g.cur.reg)}</b></li>`).join('')}</ul></div>`:'<p class="note">Sem importações neste período.</p>';
+  return `<div class="an-g"><div class="an-c"><b>Registros por ${per}</b>${areaChart([{l:'Registros',c:CH[0],v:B.map(b=>b.reg)}],A.labels,{fmt:shortN})}</div><div class="an-c"><b>Importações por ${per}</b>${areaChart([{l:'Importações',c:CH[4],v:B.map(b=>b.imp)}],A.labels)}</div></div>
+  <div class="an-g"><div class="an-c"><b>Qualidade e confirmação (%)</b>${areaChart([{l:'Sem pendência',c:CH[1],v:B.map(q)},{l:'Confirmadas no Slack',c:CH[2],v:B.map(cf)}],A.labels,{pct:true,fmt:v=>Math.round(v)+'%'})}</div><div class="an-c"><b>Valor conferido por ${per}</b>${areaChart([{l:'Valor conferido',c:CH[5],v:B.map(b=>b.valor)}],A.labels,{fmt:v=>'R$ '+shortN(v)})}</div></div>
+  <div class="an-g"><div class="an-c"><b>Mix por tipo de planilha (${esc(A.curRange)})</b>${donut}</div><div class="an-c"><b>Quando importamos (dia da semana × período)</b>${heatHTML(DN,FX,M)}</div></div>`}
 function renderAnalise(list,allL){const {mode,endK}=histPer();const A=analytics(list,mode,null,allL,endK);const K=kpiList(A);
   const seg=`<div class="seg" role="group" aria-label="Período"><button type="button" class="tab" data-mode="sem" aria-pressed="${mode==='sem'}">Semanal</button><button type="button" class="tab" data-mode="mes" aria-pressed="${mode==='mes'}">Mensal</button></div>`;
   return `<div class="an"><div class="an-h"><div><h3 style="margin:0">Comparativo ${mode==='sem'?'semanal':'mensal'}</h3><span class="note">${esc(A.curRange)} comparado com ${esc(A.prevRange)}${list.length?'':' (sem dados nos filtros atuais)'}</span></div>${seg}<label class="note" style="display:flex;align-items:center;gap:6px">Período<select id="pptPer" class="inp" style="max-width:260px">${pptOpts()}</select></label><button type="button" class="btn" id="expPpt" ${list.length?'':'disabled'}>Exportar apresentação (PPTX)</button></div>
-  <div class="kpis">${K.map(x=>`<div class="kpi"><span class="v num">${esc(x.v)}</span><span class="t">${esc(x.k)}</span><span class="dl ${x.d.c}">${x.d.t}${x.d.c==='flat'?'':' vs anterior'}</span></div>`).join('')}</div>
-  <div class="an-g"><div class="an-c"><b>Importações por ${mode==='sem'?'semana':'mês'}</b>${barSvg(A.buckets.map(b=>b.imp),A.labels,'Importações')}</div><div class="an-c"><b>Registros por ${mode==='sem'?'semana':'mês'}</b>${barSvg(A.buckets.map(b=>b.reg),A.labels,'Registros')}</div></div>
+  <div class="kpis">${K.map(x=>`<div class="kpi"><span class="v num">${esc(x.v)}</span><span class="t">${esc(x.k)}</span><span class="dl ${x.d.c}">${x.d.t}${x.d.c==='flat'?'':' vs anterior'}</span>${spark(x.s)}</div>`).join('')}</div>
+  ${anCharts(A,list,mode)}
   <div class="an-g"><div class="an-c"><b>Por tipo de planilha</b><div class="tw"><table><thead><tr><th>Tipo</th><th class="num">Import.</th><th class="num">Registros</th><th class="num">vs anterior</th></tr></thead><tbody>${anRows(A.tipos)}</tbody></table></div></div>
   <div class="an-c"><b>Por empresa</b><div class="tw"><table><thead><tr><th>Empresa</th><th class="num">Import.</th><th class="num">Registros</th><th class="num">vs anterior</th></tr></thead><tbody>${anRows(A.emps)}</tbody></table></div></div></div>
   ${A.users.some(u=>u.key!=='Sem responsável')||A.users.length>1?`<div class="an-c"><b>Por responsável</b><div class="tw"><table><thead><tr><th>Responsável</th><th class="num">Import.</th><th class="num">Registros</th><th class="num">vs anterior</th></tr></thead><tbody>${anRows(A.users)}</tbody></table></div></div>`:''}
@@ -2456,7 +2593,7 @@ function errFromErp(er){let n=0;const KL={longo:'texto longo demais',inteiro:'pr
   if(n){errSave().then(()=>renderErr())}return n}
 
 const MANUAL_URL='https://claude.ai/artifact/9rCM85SPDDDJFyJRrBFEE9';
-const PROC_VER='v135 · 12/11/2026';
+const PROC_VER='v136 · 12/11/2026';
 const PROC=[
  ['Visão geral do fluxo',`<p>O painel recebe a planilha do cliente, reconhece o tipo, ajusta para o padrão dos modelos do MercadoPhone e mostra o que mudou. O processamento acontece no seu navegador; nada vai ao ERP sozinho.</p><p><b>Arquivo → Tipo e colunas → Verificação → Antes e depois → Relatório → Exportar e registrar.</b></p>`],
  ['1. Arquivo',`<ol><li>Preencha <b>Empresa</b>, <b>ID da loja (Unit ID)</b>, <b>Responsável</b> e <b>Sistema de origem</b>. Se a loja veio da Fila do CC, já vêm preenchidos.</li><li>Suba a planilha (.xlsx, .xls, .csv, .pdf com texto, .ods, .dbf, .dat ou .zip). No .zip o painel lista todas as planilhas antes de processar.</li><li>Em <b>Preparar dados</b>, escolha o que fazer com repetidas, canceladas e faixa de datas, e as regras da empresa (forma de pagamento e vendedor padrão). <b>Salvar perfil desta empresa</b> reaproveita nas próximas.</li></ol>`],
