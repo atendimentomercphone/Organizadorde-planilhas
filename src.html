@@ -455,7 +455,7 @@ tbody tr:hover .pill{transform:scale(1.04)}
       <div id="ccFalt"></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
-      <label class="drop" id="drop" for="file"><span class="drop-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#90ff7b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg></span><b>Solte a planilha aqui ou clique para escolher</b><span>.xlsx, .xls, .csv, .pdf (com texto), arquivos binários/legados (.dbf, .ods, .dat, sem extensão) ou .zip com várias planilhas. O processamento acontece no seu navegador.</span></label>
+      <label class="drop" id="drop" for="file"><span class="drop-ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#90ff7b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg></span><b>Solte a planilha aqui ou clique para escolher</b><span>.xlsx, .xls, .csv, .pdf (com texto), arquivos binários/legados (.dbf, .ods, .dat, sem extensão) ou .zip com várias planilhas. O processamento acontece no seu navegador. · até 15 MB por planilha</span></label>
       <input id="file" type="file" multiple hidden>
       <div id="fileInfo"></div>
       <div id="loadInfo"></div>
@@ -588,7 +588,7 @@ function pickHeader(aoa){let best=0,bs=-1;const lim=Math.min(40,aoa.length);
 function groupByHeader(aoa){if(aoa.length<5)return null;const hr=pickHeader(aoa);const H=(aoa[hr]||[]).map(v=>isEmpty(v)?'':String(v).trim().replace(/\s+/g,' '));
   let rep=0;for(let j=1;j<H.length;j++)if(H[j]!==''&&H[j]===H[j-1])rep++;if(rep<2)return null;
   const starts=[];for(let j=0;j<H.length;j++){if(H[j]!==''&&(!starts.length||H[starts[starts.length-1]]!==H[j]))starts.push(j)}if(starts.length<2)return null;
-  const W=Math.max(H.length,...aoa.map(r=>r.length));const rg=starts.map((st,i)=>[st,i+1<starts.length?starts[i+1]:W]);
+  const W=aoa.reduce((m,r)=>r.length>m?r.length:m,H.length);const rg=starts.map((st,i)=>[st,i+1<starts.length?starts[i+1]:W]);
   return aoa.map((r,ri)=>rg.map(([a,b],gi)=>{if(ri===hr)return H[a];for(let j=a;j<b;j++){if(!isEmpty(r[j]))return r[j]}return ''}))}
 /* "Histórico de vendas - detalhado": um bloco por venda (NÚMERO/DATA/CLIENTE/VENDEDOR... + itens + pagamentos); vira tabela plana */
 function blockSalesToFlat(aoa){
@@ -622,7 +622,7 @@ function blockSalesToFlat(aoa){
     const n=Math.max(sl.items.length,sl.pays.length,1);
     for(let i=0;i<n;i++){const it=sl.items[i],py=sl.pays[i];out.push([sl.num,sl.data,sl.cli||'CONSUMIDOR FINAL',sl.vend,it?it.prod:'',it?it.preco:'',it?it.qtd:'',i===0&&sl.desc?sl.desc:'',py?py.forma:'',py?py.valor:'',i===0?obs:''])}});S.blockInfo={renum:dupN,vendas:sales.length,semItem,acrN,totalRel:sales.reduce((a,x)=>a+(isNaN(x.total)?0:x.total),0)};
   return out}
-function dedupCols(aoa){const g=groupByHeader(aoa);if(g)return g;const W=Math.max(0,...aoa.map(r=>r.length));if(W<2||aoa.length<5)return aoa;const K=aoa.map(r=>{const a=[];for(let i=0;i<W;i++)a.push(isEmpty(r[i])?'':String(r[i]).trim());return a});
+function dedupCols(aoa){const g=groupByHeader(aoa);if(g)return g;const W=aoa.reduce((m,r)=>r.length>m?r.length:m,0);if(W<2||aoa.length<5)return aoa;const K=aoa.map(r=>{const a=[];for(let i=0;i<W;i++)a.push(isEmpty(r[i])?'':String(r[i]).trim());return a});
   const keep=[];for(let j=0;j<W;j++){let ne=0,eq=0;for(let i=0;i<K.length;i++){if(K[i][j]!==''){ne++;for(let p=j-1;p>=0;p--){if(K[i][p]!==''){if(K[i][p]===K[i][j]&&/[A-Za-zÀ-ÿ]{2}/.test(K[i][j]))eq++;break}}}}
     if(!ne)continue;if(ne>=3&&eq>=ne*.8){if(keep.length){const t=keep[keep.length-1];for(let i=0;i<K.length;i++){if(K[i][t]===''&&K[i][j]!=='')K[i][t]=K[i][j]}}continue}keep.push(j)}
   if(keep.length===W)return aoa;return K.map(r=>keep.map(j=>r[j]))}
@@ -646,7 +646,7 @@ function unrepeatHdr(aoa,noFoot){/* relatórios em que CADA linha repete os rót
   const samp=aoa.slice(0,Math.min(aoa.length,300));const same=samp.filter(r=>{for(let i=0;i<k;i++)if(String(r[i]??'')!==String(r0[i]))return false;return true}).length;if(same/samp.length<.9)return null;
   if(r0.length<=k+1)return null;
   let rows=aoa.filter(r=>{for(let i=0;i<k;i++)if(String(r[i]??'')!==String(r0[i]))return false;return true}).map(r=>r.slice(k));
-  const w=Math.max(...rows.map(r=>r.length));let foot=null;
+  const w=rows.reduce((m,r)=>r.length>m?r.length:m,0);let foot=null;
   /* colunas finais constantes ("QTD CLIENTES:", 6171) viram total de rodapé */
   const cst=j=>rows.every(r=>String(r[j]??'')===String(rows[0][j]??''));let e=w;while(e>0&&cst(e-1)&&!isEmpty(rows[0][e-1]))e--;
   if(e<w&&w-e>=2&&typeof rows[0][e]==='string'&&/:\s*$/.test(rows[0][e])){foot=[rows[0][e],rows[0][e+1]];rows=rows.map(r=>r.slice(0,e))}
@@ -750,7 +750,7 @@ function pdfTableId(L,hi,name){
   const hy=L[hi].y,hp=L[hi].pg;const H0=L[hi].cells.map(c=>({s:c.s,x:c.x,w:c.w}));
   const nearH=x=>H0.some(h=>Math.abs(h.x-x)<=6);
   const isAnc=l=>{const c=l.cells[0];return !!c&&Math.abs(c.x-H0[0].x)<=20&&idRe0.test(c.s.trim().split(/\s+/)[0])};
-  const maxHx=Math.max(...H0.map(h=>h.x));
+  const maxHx=H0.reduce((m,h)=>h.x>m?h.x:m,-Infinity);
   const skip=new Set([hi]);const extra=[];
   L.forEach((l,k)=>{if(k===hi||l.pg!==hp||Math.abs(l.y-hy)>14||isAnc(l))return;const ex=l.cells.filter(c=>!nearH(c.x)&&c.x>maxHx-6);if(ex.length){ex.forEach(c=>extra.push({s:c.s.trim(),x:c.x,w:c.w,y:l.y}));if(ex.length===l.cells.length)skip.add(k)}});
   extra.sort((a,b)=>b.y-a.y);const gx=[];extra.forEach(c=>{const g=gx.find(g=>Math.abs(g.x-c.x)<=3);if(g){g.s+=' '+c.s;g.w=Math.max(g.w,c.w)}else gx.push({s:c.s,x:c.x,w:c.w})});
@@ -779,7 +779,7 @@ function pdfTable(lines,name){
   const nc=lines.reduce((a,l)=>Math.max(a,l.it.length),0);
   const cellsOf=l=>{const cells=[];let last=null;l.it.forEach(i=>{const cw=Math.max(3,(i.w/Math.max(1,i.s.length)));if(last&&(i.x-(last.x+last.w))<cw*1.2){last.s+=(i.x-(last.x+last.w)>cw*0.3?' ':'')+i.s;last.w=(i.x+i.w)-last.x;last.p.push({s:i.s,x:i.x,w:i.w,cw})}else{last={s:i.s,x:i.x,w:i.w,p:[{s:i.s,x:i.x,w:i.w,cw}]};cells.push(last)}});return cells};
   const L=lines.map(l=>({pg:l.pg,y:l.y,cells:cellsOf(l)}));
-  let hi=L.findIndex(l=>l.cells.length>=Math.max(2,Math.round(Math.max(...L.map(z=>z.cells.length))*0.6)));if(hi<0)hi=0;
+  let hi=L.findIndex(l=>l.cells.length>=Math.max(2,Math.round(L.reduce((m,z)=>z.cells.length>m?z.cells.length:m,0)*0.6)));if(hi<0)hi=0;
   const H=L[hi].cells;const cols=H.map(c=>({x0:c.x,x1:c.x+c.w}));const hk=H.map(c=>c.s.trim()).join('|');
   const colOf=c=>{let best=-1,bo=-1e9;cols.forEach((k,j)=>{const ov=Math.min(c.x+c.w,k.x1+6)-Math.max(c.x,k.x0-6);if(ov>bo){bo=ov;best=j}});if(bo>0)return best;let d=1e9;cols.forEach((k,j)=>{const dd=Math.abs((c.x+c.w/2)-(k.x0+k.x1)/2);if(dd<d){d=dd;best=j}});return best};
   const rows=[];L.slice(hi+1).forEach(l=>{const r=Array(cols.length).fill('');l.cells.forEach(c=>{const j=colOf(c);r[j]=(r[j]?r[j]+' ':'')+c.s.trim()});if(r.join('|')===hk)return;if(!r.some(v=>v!==''))return;rows.push(r)});
@@ -843,10 +843,12 @@ function renderLoad(){const el=$('#loadInfo');if(!el)return;
 function showReady(){try{const R=S.recs.filter(r=>!r.dup),n=lotsFor(),c={ok:0,adj:0,att:0};R.forEach(r=>c[status(r)]++);
   const t=INT(R.length)+' registro'+(R.length===1?'':'s')+' organizado'+(R.length===1?'':'s')+' em '+n+' arquivo'+(n>1?'s':'')+' no modelo '+TYPES[S.type].name+(c.att?'. '+INT(c.att)+' com atenção para conferir antes de baixar.':'. Tudo certo para baixar.');
   S.ready={t};S.load=null;renderLoad();toast('Pronto para baixar: '+INT(R.length)+' registros organizados.');if((S.tab||'arq')==='arq')goTab(S.detect&&S.detect.low?'tipo':'dep')}catch(e){S.load=null;renderLoad()}}
+const MAX_MB=15,MAX_BYTES=MAX_MB*1024*1024;
+function dropBig(files){const big=files.filter(f=>f.size>MAX_BYTES);if(big.length)toast('Arquivo acima de '+MAX_MB+' MB não é processado: '+big.map(f=>f.name+' ('+(f.size/1048576).toFixed(1).replace('.',',')+' MB)').join(', ')+'. Divida a planilha em partes menores e envie de novo.');return files.filter(f=>f.size<=MAX_BYTES)}
 async function readFiles(files,append){
   S.ready=null;setLoad(4,'Lendo os arquivos...');await tick();
   try{
-    files=await expandZips(files);
+    files=dropBig(await expandZips(files));
     if(!files.length){setLoad(null);if((S.zipInfo||[]).length)toast('O ZIP não tem planilhas (.xlsx, .xls, .csv, .pdf ou binário legível) para processar.');return}
     setLoad(15,'Lendo '+files.length+' planilha'+(files.length>1?'s':'')+'...');await tick();
     const list=[];let k=0;for(const f of files){const a=await fileToAoa(f);k++;if(a)list.push(a);setLoad(15+55*k/files.length,'Lendo '+f.name+' ('+k+' de '+files.length+')');await tick()}
@@ -906,7 +908,7 @@ function fmtDoc(v){const d=digits(v);if(d.length===11)return d.replace(/(\d{3})(
   if(d.length>0&&d.length<11&&d.length>=9){const p=d.padStart(11,'0');return p.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4')}return null}
 function fmtTel(v){let d=digits(v);if(d.length>=12&&d.startsWith('55'))d=d.slice(2);if(d.length===10)return d.replace(/(\d{2})(\d{4})(\d{4})/,'($1) $2-$3');if(d.length===11)return d.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');return null}
 function isOrdDesc(){const i=S.map&&S.map.p_desc;return i>=0&&/pedido|da venda|total|geral/.test(norm(S.headers[i]||''))}
-function money(v){if(typeof v==='number')return isFinite(v)?v:NaN;let s=String(v??'').replace(/R\$|\s/g,'').replace(/[^\d.,\-]/g,'');if(!s)return NaN;
+function money(v){if(typeof v==='number')return isFinite(v)?v:NaN;if(typeof v==='string'){if(/^\d{1,15}$/.test(v))return +v;if(/^\d{1,15},\d{1,4}$/.test(v))return +v.replace(',','.')}let s=String(v??'').replace(/R\$|\s/g,'').replace(/[^\d.,\-]/g,'');if(!s)return NaN;
   const neg=s.startsWith('-')||/\)$/.test(String(v));s=s.replace(/-/g,'');const lc=s.lastIndexOf(','),ld=s.lastIndexOf('.');
   if(lc>=0&&ld>=0){s=lc>ld?s.replace(/\./g,'').replace(',','.'):s.replace(/,/g,'')}else if(lc>=0){s=s.replace(',','.')}else if(ld>=0&&/^\d{1,3}(\.\d{3})+$/.test(s)){s=s.replace(/\./g,'')}
   const n=parseFloat(s);return isNaN(n)?NaN:(neg?-n:n)}
@@ -1241,7 +1243,7 @@ function report(){
 
 /* ---------- exportação ---------- */
 const M=window.MODELS;
-function blankSheet(model,rows){const maxC=Math.max(...model.cols.map(c=>c[0]));const arr=[];for(let i=0;i<model.hr+rows.length;i++)arr.push(new Array(maxC).fill(''));return arr}
+function blankSheet(model,rows){const maxC=model.cols.reduce((m,c)=>c[0]>m?c[0]:m,0);const arr=[];for(let i=0;i<model.hr+rows.length;i++)arr.push(new Array(maxC).fill(''));return arr}
 function sheetFrom(sheetModel,fields,rowsObj,title){const rows=rowsObj;const arr=blankSheet(sheetModel,rows);
   if(title){arr[1][sheetModel.cols[0][0]]=title}
   sheetModel.cols.slice(0,fields.length).forEach((c,i)=>{arr[sheetModel.hr-1][c[0]-1]=c[1]});
@@ -2322,7 +2324,7 @@ async function cvPdfPages(f,max=40){const lib=await loadPdfjs();const doc=await 
   return {blobs:out,total:doc.numPages}}
 function cvAllSheets(u8){let wb;try{wb=XLSX.read(u8,{type:'array',cellDates:false})}catch(_){return null}const out=[];
   for(const n of wb.SheetNames){const a=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:''}).filter(r=>r.some(v=>String(v??'').trim()!==''));if(a.length>=1)out.push({sheet:n,aoa:a})}return out.length?out:null}
-async function cvReadFile(f,setP){const out=[];const add=(name,aoa,via,sheet)=>{if(aoa&&aoa.length){const u=unrepeatHdr(aoa.filter(r=>r&&r.some(v=>String(v??'').trim()!=='')),true);if(u){aoa=u;via+=' (rótulos repetidos por linha removidos)'}out.push({name,sheet:sheet||'',aoa,via})}};
+async function cvReadFile(f,setP){const out=[];if(f.size>MAX_BYTES&&!/\.zip$/i.test(f.name)){toast(f.name+' tem mais de '+MAX_MB+' MB e não é processado. Divida em partes menores.');return out}const add=(name,aoa,via,sheet)=>{if(aoa&&aoa.length){const u=unrepeatHdr(aoa.filter(r=>r&&r.some(v=>String(v??'').trim()!=='')),true);if(u){aoa=u;via+=' (rótulos repetidos por linha removidos)'}out.push({name,sheet:sheet||'',aoa,via})}};
   const u8=new Uint8Array(await f.arrayBuffer());const isZip=/\.zip$/i.test(f.name)||(u8[0]===0x50&&u8[1]===0x4b&&/\.zip$/i.test(f.name));
   if(isZip){const sub=await expandZips([f]);for(const g of sub)out.push(...await cvReadFile(g,setP));return out}
   if(CV_IMG.test(f.name)){setP&&setP('Lendo '+f.name+' por OCR...');const rows=await cvOcrBlobs([f],f.name);add(f.name,rows,'OCR (imagem)');return out}
@@ -2454,7 +2456,7 @@ function errFromErp(er){let n=0;const KL={longo:'texto longo demais',inteiro:'pr
   if(n){errSave().then(()=>renderErr())}return n}
 
 const MANUAL_URL='https://claude.ai/artifact/9rCM85SPDDDJFyJRrBFEE9';
-const PROC_VER='v134 · 09/11/2026';
+const PROC_VER='v135 · 12/11/2026';
 const PROC=[
  ['Visão geral do fluxo',`<p>O painel recebe a planilha do cliente, reconhece o tipo, ajusta para o padrão dos modelos do MercadoPhone e mostra o que mudou. O processamento acontece no seu navegador; nada vai ao ERP sozinho.</p><p><b>Arquivo → Tipo e colunas → Verificação → Antes e depois → Relatório → Exportar e registrar.</b></p>`],
  ['1. Arquivo',`<ol><li>Preencha <b>Empresa</b>, <b>ID da loja (Unit ID)</b>, <b>Responsável</b> e <b>Sistema de origem</b>. Se a loja veio da Fila do CC, já vêm preenchidos.</li><li>Suba a planilha (.xlsx, .xls, .csv, .pdf com texto, .ods, .dbf, .dat ou .zip). No .zip o painel lista todas as planilhas antes de processar.</li><li>Em <b>Preparar dados</b>, escolha o que fazer com repetidas, canceladas e faixa de datas, e as regras da empresa (forma de pagamento e vendedor padrão). <b>Salvar perfil desta empresa</b> reaproveita nas próximas.</li></ol>`],
@@ -2603,7 +2605,7 @@ function renderIA(){const el=document.getElementById('secIA');if(!el)return;
   el.querySelectorAll('.iasug [data-s]').forEach(b=>b.onclick=()=>{el.querySelector('#iaIn').value=b.dataset.s;el.querySelector('#iaIn').focus()});iaUI()}
 (async()=>{try{IA.sample=await (window.claude&&window.claude.use?window.claude.use('sample'):null)}catch(e){IA.sample=null}IA.checked=true;try{const l=IA.sample&&IA.sample.limits?await IA.sample.limits().catch(()=>null):null;if(IA.sample&&l&&!l.tools)IA.sample=null}catch(e){}renderIA()})();
 try{const sy=$('#sistema');if(sy){sy.addEventListener('change',()=>{if(S.headers.length){S.userMap=false;autoMapAll();run()}});sy.addEventListener('focus',fillSisList)}fillSisList()}catch(e){}
-window.__painel={bankCheck,IA,IA_TOOLS,iaState,iaUndoLast,iaSnapshotStart,MAPS,applyMapa,saveMapa,autoMapAll,parseErp,learnFrom,constrFor,autoMap,makePreview,makeBefore,openPreview,HISTREF:()=>HIST,S,buildWorkbook,cleanName,lotBytes,summaryText,slackMention,slackText};
+window.__painel={bankCheck,IA,IA_TOOLS,iaState,iaUndoLast,iaSnapshotStart,MAPS,applyMapa,saveMapa,autoMapAll,parseErp,learnFrom,constrFor,autoMap,makePreview,makeBefore,openPreview,HISTREF:()=>HIST,S,buildWorkbook,cleanName,lotsFor,lotBytes,summaryText,slackMention,slackText};
 S.fileName='exemplo_vendas.xlsx';
 loadAoa(SAMPLE,'exemplo_vendas.xlsx',true);
 })();

@@ -76,7 +76,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-si
 <div class="eyebrow">Guia completo · Migração de dados</div>
 <h1>Manual do Organizador Mercadophone</h1>
 <p class="lead">Como transformar a planilha de um cliente no modelo de importação do MercadoPhone: do arquivo bruto até a importação confirmada, sem repetir os erros que já recusaram planilhas antes.</p>
-<div class="meta"><span>Versão do painel: v134</span><span>Atualizado em 09/11/2026</span><span>Prints reais do painel</span></div>
+<div class="meta"><span>Versão do painel: v135</span><span>Atualizado em 12/11/2026</span><span>Prints reais do painel</span></div>
 </header>
 
 <section id="visao">
@@ -273,6 +273,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-si
 
 <section id="faq">
 <h2>11. Problemas comuns</h2>
+<details><summary>Qual o tamanho máximo da planilha?</summary><p>Até <b>15 MB por planilha</b> (cerca de 200 mil linhas de produtos). Arquivo maior aparece com o aviso “Arquivo acima de 15 MB não é processado” e não é lido: divida em partes menores e envie de novo. Planilhas grandes levam alguns minutos (cerca de 1 minuto e meio para 15 MB); acompanhe pela barra de progresso e não feche a aba.</p></details>
 <details><summary>O ERP recusou a planilha. O que faço?</summary><p>Cole a mensagem de erro no <a href="#ia">Assistente IA</a> ou registre no <a href="#banco">Banco de erros</a>. Corrija, gere de novo e confira a etapa 6 até aparecer “Nenhum erro conhecido”.</p></details>
 <details><summary>“Linhas 16 a 19: O tipo de movimentação é obrigatório”</summary><p>Financeiro sem tipo. O painel deduz pelo texto, pelo sinal do valor ou pelo nome do arquivo. Se avisar que não identificou, preencha 1 (receita) ou 2 (despesa).</p></details>
 <details><summary>Estoque saiu fora do padrão (GB com nome de aparelho)</summary><p>Confira na etapa 2 se a coluna Modelo/Nome está ligada à coluna certa. O painel corrige quando o nome está na coluna de GB.</p></details>
@@ -324,6 +325,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-si
 <p>Este manual é atualizado sempre que o painel muda. Última coluna indica o que mudou na documentação.</p>
 <div class="tbl"><table>
 <tr><th>Painel</th><th>Data</th><th>Mudança no painel</th></tr>
+<tr><td>v135</td><td>12/11/2026</td><td>Limite de 15 MB por planilha (aviso claro acima disso) e correção de erro "Maximum call stack size exceeded" em planilhas grandes (acima de ~120 mil linhas). Leitura de valores mais rápida.</td></tr>
 <tr><td>v134</td><td>09/11/2026</td><td>Histórico: o seletor "Período" agora atualiza todo o dashboard (indicadores, gráficos, tabelas, comparativo e sistemas) para a semana ou mês escolhido, e o slide exportado usa o mesmo período.</td></tr>
 <tr><td>v133</td><td>09/11/2026</td><td>Exportar apresentação: novo seletor "Período do slide" para escolher a semana (últimas 12) ou o mês (últimos 6) que vai no slide.</td></tr>
 <tr><td>v132</td><td>09/11/2026</td><td>Exportar apresentação (PPTX) agora gera um slide só: resumo do mês (6 indicadores), planilhas mais importadas e sistemas que mais importamos, com pendências.</td></tr>
